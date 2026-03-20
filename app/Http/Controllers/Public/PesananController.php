@@ -14,10 +14,11 @@ use App\Models\DetailPesanan;
 use Barryvdh\DomPDF\Facade\Pdf;
 class PesananController extends Controller
 {
-    public function show(Produk $produk)
-    {
-        return view('pesanan.show', compact('produk'));
-    }
+public function show(Produk $produk)
+{
+    // Mengirim variabel $produk, bukan $pesanan
+    return view('pesanan.show', compact('produk'));
+}
 
     public function addToCart(Request $request, Produk $produk)
     {
