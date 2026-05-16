@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\DetailPesanan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoicePesananMail;
+use Illuminate\Support\Facades\Log;
 class PesananController extends Controller
 {
 public function show(Produk $produk)
@@ -86,9 +89,10 @@ public function show(Produk $produk)
         return view('pesanan.checkout', compact('keranjang', 'total_harga', 'potongan_diskon', 'total_bayar', 'total_item'));
     }
 
-    public function storeCheckout(Request $request)
+ public function storeCheckout(Request $request)
     {
         $request->validate([
+            'bank_tujuan' => 'required|string',
             'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'metode_pengiriman' => 'required|string|in:Ambil di Toko,Kurir Lokal',
         ]);
@@ -98,7 +102,6 @@ public function show(Produk $produk)
         $total_harga = $keranjang->detailKeranjang->sum('subtotal');
         $total_item = $keranjang->detailKeranjang->sum('jumlah');
 
-        // Re-kalkulasi diskon 
         $potongan_diskon = 0;
         if ($total_item >= 5) {
             $potongan_diskon = $total_harga * 0.10;
@@ -113,7 +116,7 @@ public function show(Produk $produk)
             'total_harga' => $total_harga,
             'potongan_diskon' => $potongan_diskon,
             'total_bayar' => $total_bayar,
-            'metode_pengiriman' => $request->metode_pengiriman,
+            'metode_pengiriman' => $request->metode_pengiriman . ' | Bayar via: ' . $request->bank_tujuan,
             'bukti_bayar' => $pathBukti,
             'status' => 'Verifikasi',
         ]);
@@ -133,7 +136,13 @@ public function show(Produk $produk)
 
         $keranjang->update(['status' => 'selesai']);
 
-        return redirect()->route('pesanan.riwayat')->with('success', 'Pesanan berhasil dikirim!');
+        try {
+            Mail::to(Auth::user()->email)->send(new InvoicePesananMail($pesanan));
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim email invoice: ' . $e->getMessage());
+        }
+
+        return redirect()->route('pesanan.riwayat')->with('success', 'Pesanan berhasil dikirim & menunggu verifikasi Kasir! Invoice telah dikirim ke email Anda.');
     }
     // UPDATE fungsi riwayat agar memanggil detailPesanan
     public function riwayat()
@@ -147,14 +156,14 @@ public function show(Produk $produk)
     }
 
     // FUNGSI BARU: Untuk tombol "Cek Detail"
-    public function showRiwayat($id)
-    {
-        $pesanan = Pesanan::with('detailPesanan.produk')
-                          ->where('user_id', Auth::id())
-                          ->findOrFail($id);
+public function showRiwayat($id)
+{
+    $pesanan = Pesanan::with(['detailPesanan.produk', 'user'])
+                ->where('user_id', auth()->id())
+                ->findOrFail($id);
 
-        return view('pesanan.detail_riwayat', compact('pesanan'));
-    }
+    return view('pesanan.detail', compact('pesanan'));
+}
 public function cetakInvoice($id)
     {
         $pesanan = Pesanan::with(['user', 'detailPesanan.produk'])

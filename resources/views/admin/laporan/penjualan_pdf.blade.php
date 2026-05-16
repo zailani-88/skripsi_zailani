@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Penjualan Orbit Print</title>
+    <title>Laporan Penjualan Orbit Digital</title>
     <style>
         body { font-family: sans-serif; font-size: 11px; }
-        .kop-table { width: 100%; background: #312e81; color: #fff; border-radius: 10px; margin-bottom: 20px; border-collapse: collapse; }
-        .kop-table td { padding: 15px; border: none; }
-        table.data { width: 100%; border-collapse: collapse; }
-        table.data th { background: #f3f4f6; padding: 10px; border: 1px solid #ddd; text-align: left; text-transform: uppercase; }
-        table.data td { padding: 10px; border: 1px solid #ddd; }
-        .total-row { background: #312e81; color: #fff; font-weight: bold; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { background: #4f46e5; color: white; padding: 8px; border: 1px solid #ddd; text-transform: uppercase; }
+        td { padding: 8px; border: 1px solid #ddd; }
+        .total-box { text-align: right; font-size: 14px; font-weight: bold; background: #f3f4f6; padding: 10px; }
+        .footer { margin-top: 50px; text-align: right; }
     </style>
 </head>
 <body>
-    <table class="kop-table">
-        <tr>
-            <td>
-                <h2 style="margin:0;">ORBIT DIGITAL PRINTING</h2>
-                <p style="margin:0;">Laporan Penjualan & Omzet Bulanan</p>
-            </td>
-            <td style="text-align: right;">
-                Periode: {{ date('F Y') }}<br>
-                Dicetak: {{ date('d/m/Y') }}
-            </td>
-        </tr>
-    </table>
+    <div class="header">
+        <h1 style="margin:0;">ORBIT DIGITAL PRINTING</h1>
+        <p style="margin:5px 0;">Laporan Penjualan Bulanan (Selesai)</p>
+        <p style="margin:0; font-size: 10px;">Periode: {{ date('F Y') }}</p>
+    </div>
 
-    <table class="data">
+    <table>
         <thead>
             <tr>
-                <th>No. Invoice</th>
-                <th>Tanggal</th>
+                <th>No</th>
+                <th>Tgl</th>
+                <th>Invoice</th>
                 <th>Pelanggan</th>
-                <th>Subtotal</th>
-                <th>Pot. Diskon</th>
-                <th>Total Bayar</th>
+                <th>Metode</th>
+                <th style="text-align: right;">Total Bayar</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($pesanan as $p)
+            @foreach($pesanan as $index => $p)
             <tr>
-                <td>{{ $p->nomor_invoice }}</td>
+                <td style="text-align: center;">{{ $index + 1 }}</td>
                 <td>{{ $p->created_at->format('d/m/Y') }}</td>
+                <td style="font-weight: bold;">{{ $p->nomor_invoice }}</td>
                 <td>{{ $p->user->name }}</td>
-                <td>Rp {{ number_format($p->total_harga, 0, ',', '.') }}</td>
-                <td style="color: red;">- Rp {{ number_format($p->potongan_diskon, 0, ',', '.') }}</td>
-                <td style="font-weight: bold;">Rp {{ number_format($p->total_bayar, 0, ',', '.') }}</td>
+                <td>{{ explode(' | ', $p->metode_pengiriman)[0] }}</td>
+                <td style="text-align: right;">Rp {{ number_format($p->total_bayar, 0, ',', '.') }}</td>
             </tr>
             @endforeach
-            <tr class="total-row">
-                <td colspan="5" style="text-align: right;">TOTAL OMZET BERSIH:</td>
-                <td>Rp {{ number_format($totalOmzet, 0, ',', '.') }}</td>
-            </tr>
         </tbody>
     </table>
+
+    <div class="total-box">
+        TOTAL OMZET BULAN INI: Rp {{ number_format($totalOmzet, 0, ',', '.') }}
+    </div>
+
+    <div class="footer">
+        <p>Banjarmasin, {{ date('d F Y') }}</p>
+        <br><br><br>
+        <p><strong>( Admin Utama )</strong></p>
+    </div>
 </body>
 </html>

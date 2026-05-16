@@ -19,7 +19,7 @@
                     <div class="md:w-1/3 bg-gray-50 p-8 border-r border-gray-100 flex flex-col items-center justify-center text-center">
                         <img src="{{ asset('storage/'.$produk->gambar) }}" class="w-full rounded-2xl shadow-md mb-6 transform hover:scale-105 transition-transform">
                         <h3 class="font-black text-xl text-gray-950 uppercase leading-none">{{ $produk->nama_produk }}</h3>
-                        <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mt-3 px-3 py-1 bg-indigo-50 rounded-full inline-block">{{ $produk->bahanBaku->nama_bahan ?? 'Material Standar' }}</p>
+                        <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mt-3 px-3 py-1 bg-indigo-50 rounded-full inline-block">{{ $produk->bahanBaku->pluck('nama_bahan')->implode(', ') ?: 'Material Custom' }}</p>
                         
                         <div class="mt-8 w-full p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
                             <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Harga Estimasi Dasar</p>

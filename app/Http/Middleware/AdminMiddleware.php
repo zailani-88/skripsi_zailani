@@ -5,22 +5,26 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
-  public function handle(Request $request, Closure $next): Response
-{
-    // Cek apakah user sudah login dan apakah rolenya admin
-    if (auth()->check() && auth()->user()->role === 'admin') {
-        return $next($request);
-    }
+    public function handle(Request $request, Closure $next): Response
+    {
+        // 1. Cek apakah sudah login
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-    // Jika bukan admin, lempar balik ke halaman utama
-    return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
-}
+        // 2. Daftar role yang diizinkan masuk ke area admin
+        $rolesPetugas = ['super_admin', 'admin_kantor', 'kasir'];
+
+        // 3. Jika rolenya termasuk petugas, izinkan lewat
+        if (in_array(Auth::user()->role, $rolesPetugas)) {
+            return $next($request);
+        }
+
+        // 4. Jika bukan petugas (pelanggan), tendang ke dashboard pelanggan
+        return redirect()->route('dashboard')->with('error', 'Akses Ditolak! Anda bukan petugas Orbit Print.');
+    }
 }

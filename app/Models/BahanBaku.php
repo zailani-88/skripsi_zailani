@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class BahanBaku extends Model {
     protected $table = 'bahan_baku';
-    protected $fillable = ['nama_bahan', 'stok', 'satuan'];
+protected $fillable = ['nama_bahan', 'kode_barcode', 'stok', 'minimum_stok', 'satuan', 'supplier'];
 
-    // Satu bahan baku bisa digunakan oleh banyak produk
-    public function produk() {
-        return $this->hasMany(Produk::class);
-    }
+// Tambahkan relasi ke histori stok
+public function riwayatStok()
+{
+    return $this->hasMany(RiwayatStok::class);
+}
 }

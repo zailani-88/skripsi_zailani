@@ -1,83 +1,92 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-                <h2 class="font-extrabold text-3xl text-gray-950 tracking-tight">Katalog Produk</h2>
-                <p class="text-gray-500 mt-1">Kelola daftar layanan cetak dan harga dasar produksi.</p>
-            </div>
-            <a href="{{ route('admin.produk.create') }}" class="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all transform active:scale-95">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                Tambah Produk
-            </a>
-        </div>
+        <h2 class="font-black text-2xl text-gray-900 uppercase tracking-tight">Katalog Produk & Formula</h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-400 text-[11px] uppercase tracking-widest font-bold">
-                            <th class="px-8 py-5">Produk</th>
-                            <th class="px-8 py-5">Kategori Bahan</th>
-                            <th class="px-8 py-5">Harga Dasar</th>
-                            <th class="px-8 py-5">Status</th>
-                            <th class="px-8 py-5 text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach($produk as $item)
-                        <tr class="hover:bg-indigo-50/30 transition-colors group">
-                            <td class="px-8 py-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex-shrink-0 overflow-hidden shadow-sm">
-                                        @if($item->gambar)
-                                            <img src="{{ asset('storage/'.$item->gambar) }}" class="w-full h-full object-cover">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <span class="block text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $item->nama_produk }}</span>
-                                        <span class="text-[11px] text-gray-400 font-medium">ID: #ORD-{{ str_pad($item->id, 4, '0', STR_PAD_LEFT) }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="inline-flex items-center px-3 py-1 bg-indigo-50 text-indigo-600 text-[11px] font-bold rounded-lg border border-indigo-100">
-                                    {{ $item->bahanBaku->nama_bahan }}
-                                </span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="block text-sm font-extrabold text-gray-900">Rp {{ number_format($item->harga_dasar, 0, ',', '.') }}</span>
-                                <span class="text-[10px] text-gray-400 font-medium uppercase italic">Per {{ $item->bahanBaku->satuan }}</span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-                                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                                    Published
-                                </span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <div class="flex justify-end items-center gap-2">
-                                    <a href="{{ route('admin.produk.edit', $item->id) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                    </a>
-                                    <form action="{{ route('admin.produk.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus produk ini?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    <div class="py-12" x-data="{ modalAdd: false, modalEdit: false, modalFormula: false, editData: {}, formulaData: [] }">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-bold uppercase tracking-widest text-xs">
+                    ✓ {{ session('success') }}
+                </div>
+            @endif
+
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-indigo-950 text-white">
+                    <div>
+                        <h3 class="font-black text-xl uppercase">Daftar Produk</h3>
+                        <p class="text-xs text-indigo-300 mt-1">Atur harga dasar dan formula bahan untuk kalkulasi otomatis.</p>
+                    </div>
+                    </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($produk as $p)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="p-5 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        
+                                        <button @click="modalFormula = true; editData = { id: {{ $p->id }}, nama: '{{ $p->nama_produk }}' }; formulaData = {{ $p->bahanBaku->pluck('id') }}" class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition" title="Setting Formula Bahan">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                         </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                        
+                                        </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
+        <div x-show="modalFormula" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div @click.away="modalFormula = false" class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
+                <h3 class="font-black text-gray-900 uppercase text-xl mb-2">Formula Komposisi Bahan</h3>
+                <p class="text-xs font-bold text-indigo-600 mb-6 bg-indigo-50 inline-block px-3 py-1 rounded-lg">Produk: <span x-text="editData.nama"></span></p>
+                
+                <form :action="`{{ url('admin/produk') }}/${editData.id}/formula`" method="POST" class="overflow-y-auto custom-scrollbar pr-2 space-y-4">
+                    @csrf
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($semuaBahan as $b)
+                        <div class="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl bg-gray-50 hover:bg-white transition shadow-sm">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="is_used[{{ $b->id }}]" value="1" 
+                                    class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                    x-bind:checked="formulaData.includes({{ $b->id }})">
+                            </div>
+                            
+                            <div class="flex-1">
+                                <p class="font-black text-gray-900 uppercase text-sm">{{ $b->nama_bahan }}</p>
+                                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Sisa Gudang: {{ $b->stok }} {{ $b->satuan }}</p>
+                            </div>
+
+                            <div class="w-24">
+                                <label class="block text-[9px] font-black text-gray-400 uppercase mb-1">Jumlah</label>
+                                <input type="number" step="0.01" name="jumlah_digunakan[{{ $b->id }}]" class="w-full rounded-xl border-gray-200 text-sm font-bold p-2" placeholder="Cth: 1.0" value="1">
+                            </div>
+
+                            <div class="w-40">
+                                <label class="block text-[9px] font-black text-gray-400 uppercase mb-1">Dikalikan Dengan</label>
+                                <select name="tipe_pengurangan[{{ $b->id }}]" class="w-full rounded-xl border-gray-200 text-xs font-bold p-2 uppercase">
+                                    <option value="per_meter">Luas (Meter Persegi)</option>
+                                    <option value="per_pcs">Kuantitas (Qty Pcs)</option>
+                                </select>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="pt-6 pb-2 flex justify-end gap-3 sticky bottom-0 bg-white border-t border-gray-100 mt-4">
+                        <button type="button" @click="modalFormula = false" class="px-5 py-2.5 bg-gray-100 text-gray-600 font-black rounded-xl uppercase text-xs">Tutup</button>
+                        <button type="submit" class="px-5 py-2.5 bg-indigo-600 text-white font-black rounded-xl uppercase text-xs shadow-lg">Simpan Formula</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </x-app-layout>

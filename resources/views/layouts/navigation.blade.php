@@ -1,6 +1,6 @@
 <nav x-data="{ open: false, openLaporan: false }" class="bg-indigo-900 text-white w-64 h-screen fixed left-0 top-0 hidden lg:flex flex-col shadow-2xl z-50">
     <div class="p-6 border-b border-indigo-800 flex-none">
-        <a href="{{ Auth::user()->role == 'admin' ? route('admin.dashboard') : route('dashboard') }}" class="flex items-center space-x-3 group">
+        <a href="{{ in_array(Auth::user()->role, ['super_admin', 'admin_kantor', 'kasir']) ? route('admin.dashboard') : route('dashboard') }}" class="flex items-center space-x-3 group">
             <div class="bg-white p-2 rounded-lg transform group-hover:rotate-12 transition-transform">
                 <img src="{{ asset('images/orbit.png') }}" class="h-8 w-8" alt="Logo">
             </div>
@@ -9,24 +9,36 @@
     </div>
 
     <div class="flex-1 overflow-y-auto custom-scrollbar px-4 py-6 space-y-2">
-        @if(Auth::user()->role == 'admin')
-            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mb-4 tracking-widest">Panel Administrator</p>
-
+        @if(Auth::user()->role == 'super_admin')
+            <p class="text-[10px] font-black text-red-400 uppercase px-2 mb-4 tracking-widest">Super Administrator</p>
             <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span class="font-medium">Dashboard Admin</span>
+                <span class="font-medium">Dashboard System</span>
             </a>
+            
+            <a href="{{ route('admin.karyawan.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.karyawan.*') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span class="font-medium">Kelola Karyawan</span>
+            </a>
+        @endif
 
+        @if(in_array(Auth::user()->role, ['super_admin', 'admin_kantor', 'kasir']))
+            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mt-4 mb-4 tracking-widest">Operasional Toko</p>
+            
+            @if(in_array(Auth::user()->role, ['super_admin', 'kasir']))
             <a href="{{ route('admin.pesanan.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.pesanan.index') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="font-medium">Antrean Pesanan</span>
             </a>
+            @endif
 
             <a href="{{ route('admin.pesanan.selesai') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.pesanan.selesai') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 <span class="font-medium">Riwayat Selesai</span>
             </a>
+        @endif
 
+        @if(in_array(Auth::user()->role, ['super_admin', 'admin_kantor']))
             <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mt-8 mb-4 tracking-widest">Inventory & Produk</p>
 
             <a href="{{ route('admin.bahan.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.bahan.*') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
@@ -56,12 +68,13 @@
                     <a href="{{ route('admin.laporan.terlaris') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">3. Produk Terlaris</a>
                     <a href="{{ route('admin.laporan.topPelanggan') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">4. Top Pelanggan</a>
                     <a href="{{ route('admin.laporan.pembatalan') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">5. Log Pembatalan</a>
-                   <a href="{{ route('admin.laporan.stok') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">6. Laporan Stok</a>
-<a href="{{ route('admin.laporan.retur') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">7. Laporan Retur</a>
+                    <a href="{{ route('admin.laporan.stok') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">6. Laporan Stok</a>
+                    <a href="{{ route('admin.laporan.retur') }}" target="_blank" class="block px-4 py-2 text-xs font-bold text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition uppercase tracking-wider">7. Laporan Retur</a>
                 </div>
             </div>
+        @endif
 
-        @else
+        @if(Auth::user()->role == 'pelanggan')
             <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mb-4 tracking-widest">Menu Pelanggan</p>
 
             <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
@@ -108,7 +121,6 @@
 </nav>
 
 <style>
-    /* Custom Thin Scrollbar for Elegant Look */
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }

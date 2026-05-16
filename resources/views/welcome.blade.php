@@ -80,7 +80,7 @@
                             </div>
                             <div class="px-4 pb-4">
                                 <h3 class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight text-lg">{{ $item->nama_produk }}</h3>
-                                <p class="text-xs text-gray-400 mt-1 font-bold tracking-widest uppercase italic">{{ $item->bahanBaku->nama_bahan }}</p>
+                              <p class="text-xs text-gray-400 mt-1 font-bold tracking-widest uppercase italic">{{ $item->bahanBaku->pluck('nama_bahan')->implode(', ') ?: 'Material Custom' }}</p>
                                 <div class="mt-8 flex justify-between items-center border-t border-gray-50 pt-4">
                                     <div class="flex flex-col">
                                         <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Mulai Dari</span>

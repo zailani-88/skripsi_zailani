@@ -38,7 +38,7 @@
                     </div>
                     <div class="px-4 pb-4 text-center">
                         <h3 class="font-black text-gray-950 uppercase text-lg group-hover:text-indigo-600 transition-colors tracking-tight">{{ $item->nama_produk }}</h3>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 italic">{{ $item->bahanBaku->nama_bahan }}</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1 italic">{{ $item->bahanBaku->pluck('nama_bahan')->implode(', ') ?: 'Material Custom' }}</p>
                         
                         <div class="mt-6 pt-6 border-t border-gray-50">
                             <span class="text-[10px] font-bold text-gray-400 block uppercase tracking-widest mb-1 italic">Mulai Dari</span>

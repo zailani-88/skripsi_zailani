@@ -10,26 +10,47 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run(): void
-    {
-        // 1. Akun Admin & User Test
-        User::create([
-            'name' => 'Zailani Admin',
-            'email' => 'admin@orbit.com',
-            'password' => Hash::make('123'),
-            'role' => 'admin',
-            'telepon' => '08123456789',
-            'alamat' => 'Kantor Orbit Print Banjarmasin',
-        ]);
+  public function run(): void
+{
+    // 1. Buat Super Admin (Akses Penuh)
+    \App\Models\User::create([
+        'name' => 'Zailani Super Admin',
+        'email' => 'superadmin@orbit.com',
+        'password' => Hash::make('password'),
+        'role' => 'super_admin',
+        'telepon' => '08110000001',
+        'alamat' => 'Kantor Pusat Orbit Print',
+    ]);
 
-        User::create([
-            'name' => 'Budi Pelanggan',
-            'email' => 'user@orbit.com',
-            'password' => Hash::make('321'),
-            'role' => 'pengguna',
-            'telepon' => '08987654321',
-            'alamat' => 'Jl. Kayu Tangi, Banjarmasin',
-        ]);
+    // 2. Buat Admin Kantor (Manajemen Stok & Laporan)
+    \App\Models\User::create([
+        'name' => 'Zailani Admin Kantor',
+        'email' => 'admin@orbit.com',
+        'password' => Hash::make('password'),
+        'role' => 'admin_kantor',
+        'telepon' => '08110000002',
+        'alamat' => 'Orbit Print Banjarmasin',
+    ]);
+
+    // 3. Buat Kasir (Proses Pembayaran & Antrean)
+    \App\Models\User::create([
+        'name' => 'Kasir Orbit',
+        'email' => 'kasir@orbit.com',
+        'password' => Hash::make('password'),
+        'role' => 'kasir',
+        'telepon' => '08110000003',
+        'alamat' => 'Area Kasir Orbit',
+    ]);
+
+    // 4. Buat Contoh Pelanggan
+    \App\Models\User::create([
+        'name' => 'Budi Pelanggan',
+        'email' => 'budi@gmail.com',
+        'password' => Hash::make('password'),
+        'role' => 'pelanggan',
+        'telepon' => '08110000004',
+        'alamat' => 'Jl. Sultan Adam Banjarmasin',
+    ]);
 
         // 2. Data Bahan Baku (Pondasi untuk Harga Dinamis)
         $bahanFlexi = BahanBaku::create(['nama_bahan' => 'Flexi Standar', 'stok' => 500, 'satuan' => 'm2']);
