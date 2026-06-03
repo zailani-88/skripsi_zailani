@@ -203,6 +203,48 @@
                     </div>
                 </div>
             </div>
+        <div x-show="modalEdit" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div @click.away="modalEdit = false" class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-lg">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-gray-100 text-gray-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-gray-900 uppercase text-xl">Edit Bahan Baku</h3>
+                        <p class="text-xs font-bold text-gray-400" x-text="editData.nama"></p>
+                    </div>
+                </div>
+                <form :action="`{{ url('admin/bahan') }}/${editData.id}`" method="POST" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Kode Barcode</label>
+                            <input type="text" name="kode_barcode" x-model="editData.barcode" class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 font-bold font-mono">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Nama Barang</label>
+                            <input type="text" name="nama_bahan" x-model="editData.nama" required class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 font-bold uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Batas Minimum Stok</label>
+                            <input type="number" name="minimum_stok" x-model.number="editData.min" required min="1" class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Satuan (Pcs/Meter)</label>
+                            <input type="text" name="satuan" x-model="editData.satuan" required class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 font-bold">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Nama Supplier</label>
+                            <input type="text" name="supplier" x-model="editData.supplier" class="w-full rounded-xl border-gray-200 focus:ring-indigo-500 font-bold">
+                        </div>
+                    </div>
+                    <div class="pt-4 flex justify-end gap-3">
+                        <button type="button" @click="modalEdit = false" class="px-5 py-2.5 bg-gray-100 text-gray-600 font-black rounded-xl uppercase text-xs">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 bg-indigo-600 text-white font-black rounded-xl uppercase text-xs">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>

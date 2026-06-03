@@ -12,27 +12,70 @@
                 </div>
             @endif
 
+            <div class="flex justify-end mb-6">
+                <a href="{{ route('admin.produk.create') }}" class="px-6 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-xl transition transform active:scale-95">
+                    + Tambah Produk Baru
+                </a>
+            </div>
+
             <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-indigo-950 text-white">
                     <div>
                         <h3 class="font-black text-xl uppercase">Daftar Produk</h3>
                         <p class="text-xs text-indigo-300 mt-1">Atur harga dasar dan formula bahan untuk kalkulasi otomatis.</p>
                     </div>
-                    </div>
+                </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-400 text-[10px] uppercase tracking-widest">
+                                <th class="p-5 font-black">Produk</th>
+                                <th class="p-5 font-black">Bahan Baku</th>
+                                <th class="p-5 font-black">Harga Dasar</th>
+                                <th class="p-5 font-black text-center">Formula</th>
+                                <th class="p-5 font-black text-center">Aksi</th>
+                            </tr>
+                        </thead>
                         <tbody class="divide-y divide-gray-100">
                             @foreach($produk as $p)
                             <tr class="hover:bg-gray-50 transition">
+                                <td class="p-5">
+                                    <div class="flex items-center gap-3">
+                                        @if($p->gambar)
+                                            <img src="{{ asset('storage/'.$p->gambar) }}" class="w-12 h-12 rounded-xl object-cover border border-gray-100">
+                                        @endif
+                                        <div>
+                                            <p class="font-black text-gray-950 uppercase">{{ $p->nama_produk }}</p>
+                                            <p class="text-[10px] font-bold text-gray-400 mt-1">{{ Str::limit($p->deskripsi, 50) }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-5">
+                                    <span class="font-bold text-xs text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">
+                                        {{ $p->bahanBaku->pluck('nama_bahan')->implode(', ') ?: '-' }}
+                                    </span>
+                                </td>
+                                <td class="p-5 font-black text-gray-900">
+                                    Rp {{ number_format($p->harga_dasar, 0, ',', '.') }}
+                                </td>
+                                <td class="p-5 text-center">
+                                    <button @click="modalFormula = true; editData = { id: {{ $p->id }}, nama: '{{ $p->nama_produk }}' }; formulaData = {{ $p->bahanBaku->pluck('id') }}" class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition" title="Setting Formula Bahan">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    </button>
+                                </td>
                                 <td class="p-5 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        
-                                        <button @click="modalFormula = true; editData = { id: {{ $p->id }}, nama: '{{ $p->nama_produk }}' }; formulaData = {{ $p->bahanBaku->pluck('id') }}" class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition" title="Setting Formula Bahan">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                        </button>
-                                        
-                                        </div>
+                                        <a href="{{ route('admin.produk.edit', $p->id) }}" class="p-2 bg-gray-50 text-gray-600 hover:bg-gray-900 hover:text-white rounded-xl transition" title="Edit Produk">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                        </a>
+                                        <form action="{{ route('admin.produk.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Hapus produk {{ $p->nama_produk }}?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition" title="Hapus Produk">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach

@@ -4,13 +4,15 @@
     </x-slot>
 
     <div class="py-12" x-data="{ 
-        panjang: 0, 
-        lebar: 0, 
+        panjang: '', 
+        lebar: '', 
         jumlah: 1, 
         hargaDasar: {{ $produk->harga_dasar }},
         get total() {
-            let hitung = parseFloat(this.panjang) * parseFloat(this.lebar) * parseFloat(this.hargaDasar) * parseInt(this.jumlah);
-            return isNaN(hitung) ? 0 : hitung;
+            let p = parseFloat(this.panjang) || 0;
+            let l = parseFloat(this.lebar) || 0;
+            let j = parseInt(this.jumlah) || 1;
+            return p * l * this.hargaDasar * j;
         }
     }">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -33,28 +35,46 @@
                     </div>
 
                     <div class="md:w-2/3 p-10">
+                        @if($errors->any())
+                            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold uppercase tracking-widest text-xs">
+                                @foreach($errors->all() as $error)
+                                    <p>✗ {{ $error }}</p>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold uppercase tracking-widest text-xs">
+                                ✗ {{ session('error') }}
+                            </div>
+                        @endif
+
                         <form action="{{ route('pesan.cart', $produk->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Panjang (Meter)</label>
-                                    <input type="number" step="0.01" name="panjang" x-model.number="panjang" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4" placeholder="0.00">
+                                    <input type="number" step="0.01" name="panjang" x-model="panjang" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4 @error('panjang') border-red-300 bg-red-50 @enderror" placeholder="0.00">
+                                    @error('panjang') <p class="text-red-600 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Lebar (Meter)</label>
-                                    <input type="number" step="0.01" name="lebar" x-model.number="lebar" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4" placeholder="0.00">
+                                    <input type="number" step="0.01" name="lebar" x-model="lebar" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4 @error('lebar') border-red-300 bg-red-50 @enderror" placeholder="0.00">
+                                    @error('lebar') <p class="text-red-600 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Jumlah Cetak (QTY)</label>
-                                    <input type="number" name="jumlah" x-model.number="jumlah" min="1" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4">
+                                    <input type="number" name="jumlah" x-model="jumlah" min="1" required class="w-full rounded-2xl border-gray-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 font-black text-lg p-4 @error('jumlah') border-red-300 bg-red-50 @enderror">
+                                    @error('jumlah') <p class="text-red-600 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Upload Desain (Opsional)</label>
                                     <input type="file" name="file_desain" class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition">
+                                    @error('file_desain') <p class="text-red-600 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 

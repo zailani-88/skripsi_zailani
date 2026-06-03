@@ -12,24 +12,94 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        // Ambil data produk beserta formula bahannya
         $produk = Produk::with('bahanBaku')->latest()->get();
-        // Ambil semua daftar bahan baku untuk ditampilkan di form setting
         $semuaBahan = BahanBaku::all(); 
         
         return view('admin.produk.index', compact('produk', 'semuaBahan'));
     }
 
-    // ... (fungsi store, update, destroy biarkan seperti yang sudah ada) ...
+    public function create()
+    {
+        $bahan = BahanBaku::all();
+        return view('admin.produk.create', compact('bahan'));
+    }
 
-    // FUNGSI BARU: MENYIMPAN FORMULA BAHAN
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'bahan_baku_id' => 'required|exists:bahan_baku,id',
+            'harga_dasar' => 'required|numeric|min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $pathGambar = $request->hasFile('gambar') 
+            ? $request->file('gambar')->store('produk', 'public') 
+            : null;
+
+        Produk::create([
+            'bahan_baku_id' => $request->bahan_baku_id,
+            'nama_produk' => $request->nama_produk,
+            'deskripsi' => $request->deskripsi,
+            'harga_dasar' => $request->harga_dasar,
+            'gambar' => $pathGambar,
+        ]);
+
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil ditambahkan!');
+    }
+
+    public function show(Produk $produk)
+    {
+        return redirect()->route('admin.produk.edit', $produk->id);
+    }
+
+    public function edit(Produk $produk)
+    {
+        $bahan = BahanBaku::all();
+        return view('admin.produk.edit', compact('produk', 'bahan'));
+    }
+
+    public function update(Request $request, Produk $produk)
+    {
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'bahan_baku_id' => 'required|exists:bahan_baku,id',
+            'harga_dasar' => 'required|numeric|min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $data = $request->only(['bahan_baku_id', 'nama_produk', 'deskripsi', 'harga_dasar']);
+
+        if ($request->hasFile('gambar')) {
+            if ($produk->gambar) {
+                Storage::disk('public')->delete('produk/' . $produk->gambar);
+            }
+            $data['gambar'] = $request->file('gambar')->store('produk', 'public');
+        }
+
+        $produk->update($data);
+
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil diupdate!');
+    }
+
+    public function destroy(Produk $produk)
+    {
+        if ($produk->gambar) {
+            Storage::disk('public')->delete('produk/' . $produk->gambar);
+        }
+        $produk->delete();
+
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil dihapus!');
+    }
+
     public function updateFormula(Request $request, $id)
     {
         $produk = Produk::findOrFail($id);
         
         $syncData = [];
         
-        // Jika ada bahan yang diceklis
         if($request->has('is_used')) {
             foreach($request->is_used as $bahanId => $value) {
                 $syncData[$bahanId] = [
@@ -39,7 +109,6 @@ class ProdukController extends Controller
             }
         }
         
-        // Simpan ke tabel pivot (produk_bahan) secara otomatis
         $produk->bahanBaku()->sync($syncData);
         
         return back()->with('success', 'Formula Bahan Baku untuk produk ini berhasil diatur!');

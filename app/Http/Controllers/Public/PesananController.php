@@ -32,26 +32,31 @@ public function show(Produk $produk)
             'file_desain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
 
-        $keranjang = Keranjang::firstOrCreate(
-            ['user_id' => Auth::id(), 'status' => 'aktif']
-        );
+        try {
+            $keranjang = Keranjang::firstOrCreate(
+                ['user_id' => Auth::id(), 'status' => 'aktif']
+            );
 
-        $pathDesain = $request->hasFile('file_desain') ? $request->file('file_desain')->store('desain_pesanan', 'public') : null;
+            $pathDesain = $request->hasFile('file_desain') ? $request->file('file_desain')->store('desain_pesanan', 'public') : null;
 
-        $subtotal = $request->panjang * $request->lebar * $produk->harga_dasar * $request->jumlah;
+            $subtotal = $request->panjang * $request->lebar * $produk->harga_dasar * $request->jumlah;
 
-        DetailKeranjang::create([
-            'keranjang_id' => $keranjang->id,
-            'produk_id' => $produk->id,
-            'panjang' => $request->panjang,
-            'lebar' => $request->lebar,
-            'jumlah' => $request->jumlah,
-            'subtotal' => $subtotal,
-            'file_desain' => $pathDesain,
-            'catatan' => $request->catatan,
-        ]);
+            DetailKeranjang::create([
+                'keranjang_id' => $keranjang->id,
+                'produk_id' => $produk->id,
+                'panjang' => $request->panjang,
+                'lebar' => $request->lebar,
+                'jumlah' => $request->jumlah,
+                'subtotal' => $subtotal,
+                'file_desain' => $pathDesain,
+                'catatan' => $request->catatan,
+            ]);
 
-        return redirect()->route('keranjang.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+            return redirect()->route('keranjang.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+        } catch (\Exception $e) {
+            Log::error('Gagal menambahkan ke keranjang: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menambahkan ke keranjang. Silakan coba lagi.');
+        }
     }
 
     public function cartIndex()
