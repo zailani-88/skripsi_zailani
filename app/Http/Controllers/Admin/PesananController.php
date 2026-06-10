@@ -7,10 +7,13 @@ use App\Models\Pesanan;
 use App\Models\BahanBaku;
 use App\Models\User;
 use App\Models\RiwayatStok;
+use App\Models\RiwayatPesanan;
+use App\Services\FonnteService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PesananController extends Controller
 {
@@ -97,6 +100,50 @@ class PesananController extends Controller
         }
 
         $pesanan->update(['status' => $statusBaru]);
+
+        RiwayatPesanan::create([
+            'pesanan_id' => $pesanan->id,
+            'status_log' => $statusBaru,
+            'catatan' => $request->catatan ?? 'Status diubah oleh ' . auth()->user()->name,
+        ]);
+
+        try {
+            $fonnte = new FonnteService();
+            $customer = $pesanan->user;
+
+            if (!empty($customer->telepon)) {
+                $statusLabels = [
+                    'Verifikasi' => '✅ Pembayaran sedang diverifikasi',
+                    'Antrean Cetak' => '📋 Pesanan masuk antrean cetak',
+                    'Produksi' => '🔧 Pesanan sedang diproduksi',
+                    'Siap Ambil / Dikirim' => '📦 Pesanan siap diambil / dikirim',
+                    'Selesai' => '🎉 Pesanan selesai! Terima kasih',
+                    'Dibatalkan' => '❌ Pesanan dibatalkan',
+                ];
+
+                $label = $statusLabels[$statusBaru] ?? $statusBaru;
+
+                $message = "*UPDATE STATUS PESANAN* 🖨️\n\n"
+                    . "Halo " . $customer->name . ",\n\n"
+                    . "Pesanan *" . $pesanan->nomor_invoice . "* status Anda:\n"
+                    . "➡️ " . $label . "\n\n";
+
+                if ($statusBaru == 'Selesai') {
+                    $message .= "Jangan lupa beri ulasan ya! 🙏\n";
+                } elseif ($statusBaru == 'Dibatalkan') {
+                    $message .= "Jika ada pertanyaan, silakan hubungi kami.\n";
+                } else {
+                    $message .= "Terima kasih telah berbelanja di Orbit Digital Printing 🙏\n";
+                }
+
+                $message .= "\n" . url('/riwayat-pesanan/' . $pesanan->id);
+
+                $fonnte->sendMessage($customer->telepon, $message);
+            }
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim WA notif ke pelanggan: ' . $e->getMessage());
+        }
+
         return back()->with('success', 'Status diperbarui & Stok bahan telah disesuaikan otomatis!');
     }
 

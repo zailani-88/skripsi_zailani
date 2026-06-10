@@ -10,7 +10,7 @@
             <div class="z-10 text-center px-12 space-y-6">
                 <div class="mb-10 flex justify-center animate-bounce-subtle">
                     <div class="w-32 h-32 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-5 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                        <img src="https://ui-avatars.com/api/?name=Orbit+Print&background=fff&color=4f46e5&font-size=0.35" alt="Logo" class="max-h-full">
+                        <img src="{{ asset('images/orbit.png') }}" alt="Logo Orbit" class="max-h-full">
                     </div>
                 </div>
                 
@@ -35,7 +35,7 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 md:px-12 py-16">
             <div class="max-w-md w-full">
                 <div class="text-center lg:hidden mb-12 animate-fade-in-down">
-                     <img src="https://ui-avatars.com/api/?name=OP&background=4f46e5&color=fff&rounded=true" class="mx-auto h-16 w-auto mb-4">
+                     <img src="{{ asset('images/orbit.png') }}" class="mx-auto h-16 w-auto mb-4">
                      <h2 class="text-3xl font-bold text-gray-950">Orbit Digital Printing</h2>
                 </div>
 

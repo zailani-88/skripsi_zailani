@@ -15,6 +15,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvoicePesananMail;
 use Illuminate\Support\Facades\Log;
+use App\Services\FonnteService;
+use App\Models\User;
 class PesananController extends Controller
 {
 public function show(Produk $produk)
@@ -102,7 +104,7 @@ public function show(Produk $produk)
             'metode_pengiriman' => 'required|string|in:Ambil di Toko,Kurir Lokal',
         ]);
 
-        $keranjang = Keranjang::with('detailKeranjang')->where('user_id', Auth::id())->where('status', 'aktif')->first();
+        $keranjang = Keranjang::with('detailKeranjang.produk')->where('user_id', Auth::id())->where('status', 'aktif')->first();
         
         $total_harga = $keranjang->detailKeranjang->sum('subtotal');
         $total_item = $keranjang->detailKeranjang->sum('jumlah');
@@ -145,6 +147,31 @@ public function show(Produk $produk)
             Mail::to(Auth::user()->email)->send(new InvoicePesananMail($pesanan));
         } catch (\Exception $e) {
             Log::error('Gagal kirim email invoice: ' . $e->getMessage());
+        }
+
+        try {
+            $fonnte = new FonnteService();
+            $adminList = User::whereIn('role', ['super_admin', 'admin_kantor', 'kasir'])->get();
+
+            $totalFormat = 'Rp ' . number_format($pesanan->total_bayar, 0, ',', '.');
+            $items = $keranjang->detailKeranjang->map(fn($d) => ($d->produk->nama_produk ?? 'Produk') . ' (' . $d->jumlah . ' pcs)')->join(', ');
+
+            $message = "*PESANAN BARU* 🖨️\n\n"
+                . "Invoice: " . $pesanan->nomor_invoice . "\n"
+                . "Pelanggan: " . Auth::user()->name . "\n"
+                . "Item: " . $items . "\n"
+                . "Total: " . $totalFormat . "\n"
+                . "Pengiriman: " . $pesanan->metode_pengiriman . "\n\n"
+                . "Segera verifikasi pembayaran di panel admin!\n"
+                . url('/admin/pesanan/' . $pesanan->id);
+
+            foreach ($adminList as $admin) {
+                if (!empty($admin->telepon)) {
+                    $fonnte->sendMessage($admin->telepon, $message);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim WA notif ke admin: ' . $e->getMessage());
         }
 
         return redirect()->route('pesanan.riwayat')->with('success', 'Pesanan berhasil dikirim & menunggu verifikasi Kasir! Invoice telah dikirim ke email Anda.');
