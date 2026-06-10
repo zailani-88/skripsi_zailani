@@ -26,7 +26,7 @@
             @foreach($rekapBahan as $b)
             <tr>
                 <td>{{ $b->nama_bahan }}</td>
-                <td>{{ number_format($b->total_luas, 2) }} m²</td>
+                <td>{{ number_format($b->total_pemakaian, 2) }} m²</td>
             </tr>
             @endforeach
         </tbody>

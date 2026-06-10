@@ -76,6 +76,14 @@
                                         <button @click="modalEdit = true; editData = { id: {{ $b->id }}, nama: '{{ $b->nama_bahan }}', barcode: '{{ $b->kode_barcode }}', min: {{ $b->minimum_stok }}, satuan: '{{ $b->satuan }}', supplier: '{{ $b->supplier }}' }" class="p-2 bg-gray-50 text-gray-600 hover:bg-gray-900 hover:text-white rounded-xl transition">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                         </button>
+
+                                        <button onclick="if(confirm('Yakin ingin menghapus bahan baku {{ $b->nama_bahan }}? Semua data riwayat stok akan ikut terhapus.')) { document.getElementById('delete-form-{{ $b->id }}').submit(); }" class="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition" title="Hapus">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                        <form id="delete-form-{{ $b->id }}" action="{{ route('admin.bahan.destroy', $b->id) }}" method="POST" class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -200,9 +208,11 @@
                                 </div>
                             </div>
                         </template>
-                    </div>
                 </div>
             </div>
+        </div>
+        </div>
+        
         <div x-show="modalEdit" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div @click.away="modalEdit = false" class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-lg">
                 <div class="flex items-center gap-4 mb-6">

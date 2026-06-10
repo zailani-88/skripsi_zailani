@@ -24,7 +24,7 @@ class DashboardController extends Controller
             $stats['omzet_bulan_ini'] = Pesanan::where('status', 'Selesai')
                 ->whereMonth('created_at', date('m'))
                 ->sum('total_bayar');
-            $stats['stok_kritis'] = BahanBaku::where('stok', '<=', 5)->count();
+            $stats['stok_kritis'] = BahanBaku::whereColumn('stok', '<=', 'minimum_stok')->count();
         }
 
         // 3. Data Khusus Kasir & Super Admin
