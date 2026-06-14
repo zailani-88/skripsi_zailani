@@ -25,7 +25,7 @@
                                 <img src="{{ asset('storage/'.$detail->produk->gambar) }}" class="w-16 h-16 object-cover rounded-xl shadow-sm">
                                 <div class="flex-1">
                                     <h5 class="font-black text-gray-950 uppercase">{{ $detail->produk->nama_produk }}</h5>
-                                    <p class="text-xs font-bold text-gray-500 mt-1">Ukuran: {{ $detail->panjang }}m x {{ $detail->lebar }}m | Jumlah: {{ $detail->jumlah }}</p>
+                                    <p class="text-xs font-bold text-gray-500 mt-1">Ukuran: {{ $detail->panjang }}{{ $detail->produk->satuan ?? 'm' }} x {{ $detail->lebar }}{{ $detail->produk->satuan ?? 'm' }} | Jumlah: {{ $detail->jumlah }}</p>
                                     @if($detail->finishing)
                                         <p class="text-[10px] font-bold text-indigo-600 mt-2 uppercase tracking-widest">Catatan: {{ $detail->finishing }}</p>
                                     @endif
@@ -82,7 +82,8 @@
                                 <option value="Verifikasi" {{ $pesanan->status == 'Verifikasi' ? 'selected' : '' }}>Verifikasi Pembayaran</option>
                                 <option value="Antrean Cetak" {{ $pesanan->status == 'Antrean Cetak' ? 'selected' : '' }}>Masuk Antrean Cetak</option>
                                 <option value="Produksi" {{ $pesanan->status == 'Produksi' ? 'selected' : '' }}>Sedang Produksi (Dicetak)</option>
-                                <option value="Siap Ambil / Dikirim" {{ $pesanan->status == 'Siap Ambil / Dikirim' ? 'selected' : '' }}>Siap Ambil / Dikirim</option>
+                                <option value="Siap Ambil" {{ $pesanan->status == 'Siap Ambil' ? 'selected' : '' }}>Siap Ambil di Toko</option>
+                                <option value="Sedang Dikirim" {{ $pesanan->status == 'Sedang Dikirim' ? 'selected' : '' }}>Paket Sedang Dikirim</option>
                                 <option value="Selesai" {{ $pesanan->status == 'Selesai' ? 'selected' : '' }}>Transaksi Selesai</option>
                                 <option value="Dibatalkan" {{ $pesanan->status == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                             </select>

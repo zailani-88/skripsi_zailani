@@ -27,9 +27,11 @@ public function show(Produk $produk)
 
     public function addToCart(Request $request, Produk $produk)
     {
+        $minDim = $produk->satuan === 'mm' ? 1 : 0.1;
+
         $request->validate([
-            'panjang' => 'required|numeric|min:0.1',
-            'lebar' => 'required|numeric|min:0.1',
+            'panjang' => 'required|numeric|min:' . $minDim,
+            'lebar' => 'required|numeric|min:' . $minDim,
             'jumlah' => 'required|integer|min:1',
             'file_desain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ]);
@@ -41,7 +43,9 @@ public function show(Produk $produk)
 
             $pathDesain = $request->hasFile('file_desain') ? $request->file('file_desain')->store('desain_pesanan', 'public') : null;
 
-            $subtotal = $request->panjang * $request->lebar * $produk->harga_dasar * $request->jumlah;
+            $panjangM = $produk->satuan === 'mm' ? $request->panjang / 1000 : $request->panjang;
+            $lebarM = $produk->satuan === 'mm' ? $request->lebar / 1000 : $request->lebar;
+            $subtotal = $panjangM * $lebarM * $produk->harga_dasar * $request->jumlah;
 
             DetailKeranjang::create([
                 'keranjang_id' => $keranjang->id,

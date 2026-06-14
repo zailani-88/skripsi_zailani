@@ -21,7 +21,11 @@
                                 <span class="text-yellow-600 text-xs font-black uppercase tracking-widest">Menunggu Verifikasi</span>
                             @elseif($item->status == 'Proses Cetak' || $item->status == 'Produksi')
                                 <span class="text-blue-600 text-xs font-black uppercase tracking-widest">Sedang Diproses</span>
-                            @elseif($item->status == 'Selesai' || $item->status == 'Siap Ambil / Dikirim')
+                            @elseif($item->status == 'Siap Ambil')
+                                <span class="text-emerald-600 text-xs font-black uppercase tracking-widest">Siap Ambil</span>
+                            @elseif($item->status == 'Sedang Dikirim')
+                                <span class="text-blue-600 text-xs font-black uppercase tracking-widest">Sedang Dikirim</span>
+                            @elseif($item->status == 'Selesai')
                                 <span class="text-emerald-600 text-xs font-black uppercase tracking-widest">Selesai</span>
                             @else
                                 <span class="text-gray-600 text-xs font-black uppercase tracking-widest">{{ $item->status }}</span>
@@ -37,7 +41,7 @@
                             <img src="{{ asset('storage/'.$firstItem->produk->gambar) }}" class="w-24 h-24 object-cover rounded-2xl border border-gray-100 shadow-sm">
                             <div class="flex-1">
                                 <h3 class="font-black text-xl text-gray-950 uppercase tracking-tight">{{ $firstItem->produk->nama_produk }}</h3>
-                                <p class="text-sm font-bold text-gray-500 mt-1">Ukuran: {{ $firstItem->panjang }}m x {{ $firstItem->lebar }}m</p>
+                                <p class="text-sm font-bold text-gray-500 mt-1">Ukuran: {{ $firstItem->panjang }}{{ $firstItem->produk->satuan ?? 'm' }} x {{ $firstItem->lebar }}{{ $firstItem->produk->satuan ?? 'm' }}</p>
                                 <p class="text-xs font-black text-gray-400 mt-2 uppercase">Qty: {{ $firstItem->jumlah }} Pcs</p>
                             </div>
                             <div class="text-right">

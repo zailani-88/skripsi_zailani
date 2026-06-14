@@ -155,7 +155,7 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td class="product-name uppercase">{{ $detail->produk->nama_produk }}</td>
-                <td style="font-size: 16px; font-weight: bold;">{{ $detail->panjang }}m x {{ $detail->lebar }}m</td>
+                <td style="font-size: 16px; font-weight: bold;">{{ $detail->panjang }}{{ $detail->produk->satuan ?? 'm' }} x {{ $detail->lebar }}{{ $detail->produk->satuan ?? 'm' }}</td>
                 <td style="font-size: 16px; font-weight: bold;">{{ $detail->jumlah }}</td>
                 <td class="finishing-box">
                     {{ $detail->finishing ?: 'CETAK STANDAR (TANPA FINISHING)' }}

@@ -116,7 +116,8 @@ class PesananController extends Controller
                     'Verifikasi' => '✅ Pembayaran sedang diverifikasi',
                     'Antrean Cetak' => '📋 Pesanan masuk antrean cetak',
                     'Produksi' => '🔧 Pesanan sedang diproduksi',
-                    'Siap Ambil / Dikirim' => '📦 Pesanan siap diambil / dikirim',
+                    'Siap Ambil' => '📦 Pesanan siap diambil di toko',
+                    'Sedang Dikirim' => '🚚 Paket sedang dalam perjalanan',
                     'Selesai' => '🎉 Pesanan selesai! Terima kasih',
                     'Dibatalkan' => '❌ Pesanan dibatalkan',
                 ];
@@ -186,18 +187,29 @@ class PesananController extends Controller
 
     public function laporanBahan()
     {
+        $cekJumlah = \App\Models\BahanBaku::count();
+        $cekFormula = DB::table('produk_bahan')->count();
+
+        if ($cekJumlah == 0) {
+            return redirect()->route('admin.dashboard')->with('error', 'Tidak ada data bahan baku! Harap daftarkan bahan baku terlebih dahulu.');
+        }
+
+        if ($cekFormula == 0) {
+            return redirect()->route('admin.dashboard')->with('error', 'Formula bahan baku belum diatur! Silakan atur Formula Bahan di menu Data Produk → klik ikon roda gigi pada produk.');
+        }
+
         $rekapBahan = DB::table('detail_pesanan')
             ->join('pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
             ->join('produk', 'detail_pesanan.produk_id', '=', 'produk.id')
             ->join('produk_bahan', 'produk.id', '=', 'produk_bahan.produk_id')
             ->join('bahan_baku', 'produk_bahan.bahan_baku_id', '=', 'bahan_baku.id')
-            ->where('pesanan.status', 'Selesai')
-            ->selectRaw('bahan_baku.nama_bahan, 
+            ->whereIn('pesanan.status', ['Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Selesai'])
+            ->selectRaw('bahan_baku.nama_bahan, bahan_baku.satuan,
                 SUM(CASE 
                     WHEN produk_bahan.tipe_pengurangan = "per_meter" THEN (detail_pesanan.panjang * detail_pesanan.lebar * produk_bahan.jumlah_digunakan * detail_pesanan.jumlah)
                     ELSE (produk_bahan.jumlah_digunakan * detail_pesanan.jumlah)
                 END) as total_pemakaian')
-            ->groupBy('bahan_baku.nama_bahan')
+            ->groupBy('bahan_baku.nama_bahan', 'bahan_baku.satuan')
             ->get();
 
         $pdf = Pdf::loadView('admin.laporan.bahan_pdf', compact('rekapBahan'))
