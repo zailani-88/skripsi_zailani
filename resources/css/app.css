@@ -2,9 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tambahan Animasi untuk Halaman Login Interaktif */
+@layer base {
+    ::selection {
+        background-color: rgba(14, 165, 233, 0.25);
+        color: #082f49;
+    }
+
+    body {
+        @apply text-gray-900;
+    }
+}
+
+@layer components {
+    /* Sidebar gradient premium */
+    nav.orbit-sidebar {
+        background: linear-gradient(180deg, #082f49 0%, #0c4a6e 45%, #075985 100%);
+        box-shadow: 4px 0 24px rgba(8, 47, 73, 0.35);
+    }
+
+    /* Kartu dengan efek glass ringan */
+    .orbit-card {
+        @apply bg-white rounded-3xl shadow-sm border border-sky-100/80;
+        box-shadow: 0 4px 24px -4px rgba(8, 47, 73, 0.08);
+    }
+
+    .orbit-card:hover {
+        box-shadow: 0 12px 32px -8px rgba(14, 165, 233, 0.15);
+    }
+
+    /* Banner hero dashboard */
+    .orbit-hero {
+        background: linear-gradient(135deg, #082f49 0%, #0369a1 50%, #0d9488 100%);
+        box-shadow: 0 20px 50px -12px rgba(8, 47, 73, 0.45);
+    }
+
+    /* Tombol utama glow */
+    .orbit-btn-primary {
+        @apply bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all transform active:scale-95;
+        box-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.45);
+    }
+
+    .orbit-btn-primary:hover {
+        box-shadow: 0 12px 28px -4px rgba(2, 132, 199, 0.55);
+    }
+
+    .orbit-btn-success {
+        @apply bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all transform active:scale-95;
+        box-shadow: 0 8px 24px -4px rgba(20, 184, 166, 0.4);
+    }
+}
+
 @layer utilities {
-    /* Animasi Subjek Fade In */
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -13,16 +61,18 @@
         from { opacity: 0; transform: translateY(-20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    /* Animasi Subtle Zoom Background */
     @keyframes subtleZoom {
         0% { transform: scale(1.05); }
         50% { transform: scale(1.1); }
         100% { transform: scale(1.05); }
     }
-    /* Animasi Bounce Lembut untuk Logo */
     @keyframes bounceSubtle {
         0%, 100% { transform: translateY(0) rotate(3deg); }
         50% { transform: translateY(-10px) rotate(3deg); }
+    }
+    @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
     }
 
     .animate-fade-in {
@@ -38,8 +88,12 @@
         animation: bounceSubtle 4s infinite ease-in-out;
     }
 
-    /* Delay Utilitas */
     .delay-100 { animation-delay: 0.1s; }
     .delay-200 { animation-delay: 0.2s; }
     .delay-300 { animation-delay: 0.3s; }
+
+    .orbit-text-gradient {
+        @apply bg-clip-text text-transparent;
+        background-image: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
+    }
 }

@@ -5,6 +5,16 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if (session('error'))
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold uppercase tracking-widest text-xs">
+                    ⚠️ {{ session('error') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-bold uppercase tracking-widest text-xs">
+                    ✅ {{ session('success') }}
+                </div>
+            @endif
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-8 border-b border-gray-50 flex justify-between items-center">
                     <h3 class="font-bold text-gray-950 uppercase tracking-tight">Daftar Item Cetak</h3>

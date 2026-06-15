@@ -1,16 +1,16 @@
-<nav x-data="{ open: false, openLaporan: false }" class="bg-indigo-900 text-white w-64 h-screen fixed left-0 top-0 hidden lg:flex flex-col shadow-2xl z-50">
+<nav x-data="{ open: false, openLaporan: false }" class="orbit-sidebar text-white w-64 h-screen fixed left-0 top-0 hidden lg:flex flex-col z-50">
     <div class="p-6 border-b border-indigo-800 flex-none">
         <a href="{{ in_array(Auth::user()->role, ['super_admin', 'admin_kantor', 'kasir']) ? route('admin.dashboard') : route('dashboard') }}" class="flex items-center space-x-3 group">
             <div class="bg-white p-2 rounded-lg transform group-hover:rotate-12 transition-transform">
                 <img src="{{ asset('images/orbit.png') }}" class="h-8 w-8" alt="Logo">
             </div>
-            <span class="text-xl font-bold tracking-wider uppercase">Orbit <span class="text-indigo-400">Digital</span></span>
+            <span class="text-xl font-bold tracking-wider uppercase">Orbit <span class="text-cyan-300">Digital</span></span>
         </a>
     </div>
 
     <div class="flex-1 overflow-y-auto custom-scrollbar px-4 py-6 space-y-2">
         @if(Auth::user()->role == 'super_admin')
-            <p class="text-[10px] font-black text-red-400 uppercase px-2 mb-4 tracking-widest">Super Administrator</p>
+            <p class="text-[10px] font-black text-amber-300 uppercase px-2 mb-4 tracking-widest">★ Super Administrator</p>
             <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 <span class="font-medium">Dashboard System</span>
@@ -23,9 +23,9 @@
         @endif
 
         @if(in_array(Auth::user()->role, ['super_admin', 'admin_kantor', 'kasir']))
-            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mt-4 mb-4 tracking-widest">Operasional Toko</p>
+            <p class="text-[10px] font-black text-cyan-300 uppercase px-2 mt-4 mb-4 tracking-widest">Operasional Toko</p>
 
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.dashboard') || request()->routeIs('dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 <span class="font-medium">Dashboard</span>
             </a>
@@ -44,7 +44,7 @@
         @endif
 
         @if(in_array(Auth::user()->role, ['super_admin', 'admin_kantor']))
-            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mt-8 mb-4 tracking-widest">Inventory & Produk</p>
+            <p class="text-[10px] font-black text-teal-300 uppercase px-2 mt-8 mb-4 tracking-widest">Inventory & Produk</p>
 
             <a href="{{ route('admin.bahan.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.bahan.*') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
@@ -56,7 +56,7 @@
                 <span class="font-medium">Data Produk</span>
             </a>
 
-            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mt-8 mb-4 tracking-widest">Pusat Laporan</p>
+            <p class="text-[10px] font-black text-sky-300 uppercase px-2 mt-8 mb-4 tracking-widest">Pusat Laporan</p>
 
             <div class="relative">
                 <button @click="openLaporan = !openLaporan" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-indigo-800 text-indigo-100 transition group">
@@ -80,7 +80,7 @@
         @endif
 
         @if(Auth::user()->role == 'pelanggan')
-            <p class="text-[10px] font-black text-indigo-400 uppercase px-2 mb-4 tracking-widest">Menu Pelanggan</p>
+            <p class="text-[10px] font-black text-emerald-300 uppercase px-2 mb-4 tracking-widest">Menu Pelanggan</p>
 
             <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('dashboard') ? 'bg-indigo-700 text-white' : 'hover:bg-indigo-800 text-indigo-100' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -106,7 +106,7 @@
 
     <div class="flex-none p-4 border-t border-indigo-800 bg-indigo-950">
         <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 px-2 py-2 mb-4 rounded-xl hover:bg-indigo-800/50 transition cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center font-extrabold uppercase shadow-inner group-hover:scale-110 transition-transform">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center font-extrabold uppercase shadow-lg shadow-cyan-900/30 group-hover:scale-110 transition-transform">
                 {{ substr(Auth::user()->name, 0, 1) }}
             </div>
             <div class="flex-1 overflow-hidden">

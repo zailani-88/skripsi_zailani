@@ -8,13 +8,13 @@
         <title>{{ config('app.name', 'Orbit Print') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50">
+    <body class="font-sans antialiased bg-gradient-to-br from-slate-50 via-sky-50/40 to-teal-50/30 min-h-screen">
         <div class="min-h-screen flex">
             @include('layouts.navigation')
 
             <div class="flex-1 lg:ml-64">
                 @isset($header)
-                    <header class="bg-white border-b border-gray-200">
+                    <header class="bg-white/80 backdrop-blur-md border-b border-sky-100/80 shadow-sm">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>

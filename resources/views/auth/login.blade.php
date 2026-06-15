@@ -5,7 +5,7 @@
                  alt="Background" 
                  class="absolute inset-0 w-full h-full object-cover scale-105 animate-subtle-zoom">
             
-            <div class="absolute inset-0 bg-gradient-to-br from-indigo-950/95 via-purple-950/90 to-black/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-sky-950/90 to-teal-950/85"></div>
             
             <div class="z-10 text-center px-12 space-y-6">
                 <div class="mb-10 flex justify-center animate-bounce-subtle">
@@ -15,7 +15,7 @@
                 </div>
                 
                 <h2 class="text-5xl font-extrabold text-white tracking-tight leading-tight">
-                    Orbit <span class="text-indigo-400">Digital</span> Printing
+                    Orbit <span class="text-cyan-400">Digital</span> Printing
                 </h2>
                 <p class="text-indigo-100 text-xl font-light max-w-md mx-auto">
                     Transformasi Digital Enterprise untuk Solusi Percetakan Presisi & Kualitas Tanpa Kompromi.
@@ -28,8 +28,8 @@
                 </div>
             </div>
             
-            <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
-            <div class="absolute -top-32 -right-32 w-80 h-80 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
+            <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-25"></div>
+            <div class="absolute -top-32 -right-32 w-80 h-80 bg-teal-500 rounded-full mix-blend-screen filter blur-3xl opacity-25"></div>
         </div>
 
         <div class="w-full lg:w-1/2 flex items-center justify-center bg-white px-6 md:px-12 py-16">

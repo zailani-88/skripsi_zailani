@@ -40,12 +40,12 @@
             </div>
         </nav>
 
-        <section class="pt-40 pb-24 bg-gradient-to-b from-indigo-50/50 to-white overflow-hidden">
+        <section class="pt-40 pb-24 bg-gradient-to-b from-sky-50 via-cyan-50/30 to-white overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="space-y-8 animate-fade-in">
                     <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 text-xs font-extrabold rounded-full tracking-widest uppercase italic">Pusat Cetak Digital Terpercaya di Banjarmasin</span>
                     <h1 class="text-6xl lg:text-8xl font-extrabold text-gray-950 leading-none tracking-tighter">
-                        Cetak Ide Anda <br> <span class="text-indigo-600">Jadi Nyata.</span>
+                        Cetak Ide Anda <br> <span class="orbit-text-gradient">Jadi Nyata.</span>
                     </h1>
                     <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium">
                         Kualitas tajam, warna akurat, dan pengerjaan tepat waktu. Orbit Digital Printing siap melayani segala kebutuhan cetak Anda.

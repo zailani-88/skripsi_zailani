@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\BahanBakuController;
 use App\Http\Controllers\Admin\KaryawanController;
@@ -19,9 +19,13 @@ Route::get('/', function () {
 
 Route::get('/katalog-layanan', [KatalogController::class, 'index'])->name('katalog.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::get('/dashboard/stats', [DashboardController::class, 'stats'])
+    ->middleware(['auth'])
+    ->name('dashboard.stats');
 
 Route::middleware('auth')->group(function () {
     Route::get('/pesan/{produk}', [PesananController::class, 'show'])->name('pesan.show');

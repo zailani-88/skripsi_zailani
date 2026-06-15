@@ -54,6 +54,12 @@
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                     <h3 class="font-black text-gray-950 uppercase mb-6 tracking-tighter italic">Pengiriman & Pembayaran</h3>
                     
+                    @if (session('error'))
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+                            <p>⚠️ {{ session('error') }}</p>
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
                             @foreach ($errors->all() as $error)
@@ -62,7 +68,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('pesan.storeCheckout') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('pesan.storeCheckout') }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="{ submitting: false }" @submit="submitting = true">
                         @csrf
                         
                         <div class="space-y-2">
@@ -110,8 +116,9 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full py-4 bg-emerald-500 text-white font-black uppercase rounded-2xl shadow-xl shadow-emerald-200 hover:bg-emerald-600 transition-all transform active:scale-95">
-                            Konfirmasi Transaksi
+                        <button type="submit" :disabled="submitting" class="w-full py-4 bg-emerald-500 text-white font-black uppercase rounded-2xl shadow-xl shadow-emerald-200 hover:bg-emerald-600 transition-all transform active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                            <span x-show="!submitting">Konfirmasi Transaksi</span>
+                            <span x-show="submitting" style="display: none;">Memproses...</span>
                         </button>
                     </form>
                 </div>
