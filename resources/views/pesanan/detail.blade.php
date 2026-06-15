@@ -50,7 +50,7 @@
                                 <div class="flex-1">
                                     <h5 class="font-black text-lg text-gray-950 uppercase leading-tight">{{ $detail->produk->nama_produk }}</h5>
                                     <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                                        <p class="text-xs font-bold text-gray-500 italic">Dimensi: {{ $detail->panjang }}m x {{ $detail->lebar }}m</p>
+                                        <p class="text-xs font-bold text-gray-500 italic">Dimensi: {{ $detail->panjang }}{{ $detail->produk->satuan ?? 'm' }} x {{ $detail->lebar }}{{ $detail->produk->satuan ?? 'm' }}</p>
                                         <p class="text-xs font-black text-indigo-600 uppercase tracking-wider">Qty: {{ $detail->jumlah }} Pcs</p>
                                     </div>
                                     @if($detail->finishing)
@@ -193,12 +193,22 @@
                                 </div>
 
                                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ $pesanan->status == 'Selesai' ? 'bg-emerald-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Siap Ambil', 'Sedang Dikirim', 'Selesai']) ? 'bg-emerald-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
-                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ $pesanan->status == 'Selesai' ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
-                                        <h4 class="font-black text-sm uppercase">Selesai</h4>
-                                        <p class="text-[10px] text-indigo-100 mt-1">Pesanan siap diambil/dikirim.</p>
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Siap Ambil', 'Sedang Dikirim', 'Selesai']) ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
+                                        <h4 class="font-black text-sm uppercase">Siap Ambil / Dikirim</h4>
+                                        <p class="text-[10px] text-indigo-100 mt-1">
+                                            @if($pesanan->status == 'Siap Ambil')
+                                                Pesanan siap diambil di toko.
+                                            @elseif($pesanan->status == 'Sedang Dikirim')
+                                                Paket sedang dalam perjalanan.
+                                            @elseif($pesanan->status == 'Selesai')
+                                                Pesanan sudah selesai.
+                                            @else
+                                                Pesanan akan siap.
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
 

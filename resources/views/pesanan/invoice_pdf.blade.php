@@ -45,7 +45,7 @@
         <thead>
             <tr>
                 <th>Item Produk</th>
-                <th style="text-align: center;">Ukuran (m)</th>
+                <th style="text-align: center;">Ukuran</th>
                 <th style="text-align: center;">Qty</th>
                 <th style="text-align: right;">Subtotal</th>
             </tr>
@@ -57,7 +57,7 @@
                     <strong>{{ $detail->produk->nama_produk }}</strong><br>
                     <small style="color: #718096;">Finishing: {{ $detail->finishing ?? '-' }}</small>
                 </td>
-                <td style="text-align: center;">{{ $detail->panjang }} x {{ $detail->lebar }}</td>
+                <td style="text-align: center;">{{ $detail->panjang }}{{ $detail->produk->satuan ?? 'm' }} x {{ $detail->lebar }}{{ $detail->produk->satuan ?? 'm' }}</td>
                 <td style="text-align: center;">{{ $detail->jumlah }}</td>
                 <td style="text-align: right;">Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</td>
             </tr>

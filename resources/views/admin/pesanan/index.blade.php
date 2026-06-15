@@ -40,7 +40,11 @@
                                         <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-lg text-[10px] font-black uppercase tracking-widest">Verifikasi</span>
                                     @elseif($item->status == 'Proses Cetak' || $item->status == 'Produksi')
                                         <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-[10px] font-black uppercase tracking-widest">Diproses</span>
-                                    @elseif($item->status == 'Selesai' || $item->status == 'Siap Ambil / Dikirim')
+                                    @elseif($item->status == 'Siap Ambil')
+                                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-[10px] font-black uppercase tracking-widest">Siap Ambil</span>
+                                    @elseif($item->status == 'Sedang Dikirim')
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-[10px] font-black uppercase tracking-widest">Sedang Dikirim</span>
+                                    @elseif($item->status == 'Selesai')
                                         <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-[10px] font-black uppercase tracking-widest">Selesai</span>
                                     @else
                                         <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-[10px] font-black uppercase tracking-widest">{{ $item->status }}</span>

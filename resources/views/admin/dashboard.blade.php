@@ -7,6 +7,20 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            @if(session('error'))
+                <div class="p-5 bg-red-50 border-2 border-red-200 text-red-700 rounded-3xl font-black uppercase tracking-wider text-sm flex items-center gap-3">
+                    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="p-5 bg-emerald-50 border-2 border-emerald-200 text-emerald-700 rounded-3xl font-black uppercase tracking-wider text-sm flex items-center gap-3">
+                    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
             
             <div class="bg-indigo-950 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden border border-indigo-900">
                 <div class="absolute -top-24 -right-24 w-64 h-64 bg-indigo-600 rounded-full blur-3xl opacity-20"></div>

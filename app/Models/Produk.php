@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model {
     protected $table = 'produk';
-    protected $fillable = ['bahan_baku_id', 'nama_produk', 'deskripsi', 'harga_dasar', 'gambar'];
+    protected $fillable = ['bahan_baku_id', 'nama_produk', 'deskripsi', 'harga_dasar', 'satuan', 'gambar'];
 
     // Produk terikat ke satu jenis bahan baku utama
    public function bahanBaku()

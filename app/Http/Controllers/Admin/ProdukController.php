@@ -31,6 +31,7 @@ class ProdukController extends Controller
             'deskripsi' => 'nullable|string',
             'bahan_baku_id' => 'required|exists:bahan_baku,id',
             'harga_dasar' => 'required|numeric|min:0',
+            'satuan' => 'required|in:m,mm',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -43,6 +44,7 @@ class ProdukController extends Controller
             'nama_produk' => $request->nama_produk,
             'deskripsi' => $request->deskripsi,
             'harga_dasar' => $request->harga_dasar,
+            'satuan' => $request->satuan,
             'gambar' => $pathGambar,
         ]);
 
@@ -67,10 +69,11 @@ class ProdukController extends Controller
             'deskripsi' => 'nullable|string',
             'bahan_baku_id' => 'required|exists:bahan_baku,id',
             'harga_dasar' => 'required|numeric|min:0',
+            'satuan' => 'required|in:m,mm',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->only(['bahan_baku_id', 'nama_produk', 'deskripsi', 'harga_dasar']);
+        $data = $request->only(['bahan_baku_id', 'nama_produk', 'deskripsi', 'harga_dasar', 'satuan']);
 
         if ($request->hasFile('gambar')) {
             if ($produk->gambar) {
