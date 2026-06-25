@@ -93,6 +93,24 @@
                 </div>
             </div>
 
+            @if($isStaff)
+            <div class="bg-white rounded-3xl shadow-sm border border-sky-100/80 overflow-hidden">
+                <div class="p-6 border-b border-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-gray-50/50">
+                    <div>
+                        <h3 class="font-bold text-gray-950 uppercase tracking-tight">Grafik Penjualan</h3>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">6 bulan terakhir — omzet & jumlah transaksi selesai</p>
+                    </div>
+                    <div class="flex gap-4 text-xs font-black uppercase tracking-widest">
+                        <span class="flex items-center gap-1.5 text-indigo-600"><span class="w-3 h-3 rounded-sm bg-indigo-500 inline-block"></span> Omzet</span>
+                        <span class="flex items-center gap-1.5 text-emerald-600"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Transaksi</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <canvas id="salesChart" height="100"></canvas>
+                </div>
+            </div>
+            @endif
+
             <div class="bg-white rounded-3xl shadow-sm border border-sky-100/80 overflow-hidden">
                 <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
                     <h3 class="font-bold text-gray-950 uppercase tracking-tight">3 Aktivitas Terakhir</h3>
@@ -138,7 +156,78 @@
     </div>
 
     @if($isStaff)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('salesChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($labels),
+                    datasets: [
+                        {
+                            label: 'Omzet (Rp)',
+                            data: @json($omzet),
+                            backgroundColor: 'rgba(2, 132, 199, 0.75)',
+                            borderColor: 'rgba(2, 132, 199, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Transaksi',
+                            data: @json($transaksi),
+                            type: 'line',
+                            borderColor: 'rgba(20, 184, 166, 1)',
+                            backgroundColor: 'rgba(20, 184, 166, 0.15)',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#14b8a6',
+                            tension: 0.3,
+                            yAxisID: 'y1',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    if (ctx.datasetIndex === 0) {
+                                        return ' Omzet: Rp ' + new Intl.NumberFormat('id-ID').format(ctx.raw);
+                                    }
+                                    return ' Transaksi: ' + ctx.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {
+                                callback: v => 'Rp ' + new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(v)
+                            },
+                            grid: { color: 'rgba(0,0,0,0.04)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            beginAtZero: true,
+                            grid: { drawOnChartArea: false },
+                            ticks: { stepSize: 1 }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+
         function dashboardNotif() {
             return {
                 pesananAktif: {{ $pesananAktif }},

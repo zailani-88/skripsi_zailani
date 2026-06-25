@@ -61,7 +61,11 @@ public function show(Produk $produk)
 
             $pathDesain = $request->hasFile('file_desain') ? $request->file('file_desain')->store('desain_pesanan', 'public') : null;
 
-            $subtotal = $request->panjang * $request->lebar * $produk->harga_dasar * $request->jumlah;
+            $subtotal = $produk->calculateSubtotal(
+                (float) $request->panjang,
+                (float) $request->lebar,
+                (int) $request->jumlah
+            );
 
             DetailKeranjang::create([
                 'keranjang_id' => $keranjang->id,

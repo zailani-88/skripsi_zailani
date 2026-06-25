@@ -41,10 +41,37 @@ class DashboardController extends Controller
         return compact('pesananAktif', 'totalSelesai', 'pesananBaru', 'pesananTerbaru');
     }
 
+    private function buildSalesChart(): array
+    {
+        $bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $labels = [];
+        $omzet = [];
+        $transaksi = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $labels[] = $bulanLabels[$date->month - 1] . ' ' . $date->year;
+            $omzet[] = (int) Pesanan::where('status', 'Selesai')
+                ->whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->sum('total_bayar');
+            $transaksi[] = Pesanan::where('status', 'Selesai')
+                ->whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        return compact('labels', 'omzet', 'transaksi');
+    }
+
     public function index()
     {
         $data = $this->buildStats();
         $data['isStaff'] = $this->isStaff();
+
+        if ($data['isStaff']) {
+            $data = array_merge($data, $this->buildSalesChart());
+        }
 
         return view('dashboard', $data);
     }
