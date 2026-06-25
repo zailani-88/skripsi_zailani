@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 16, 2026 at 04:43 AM
+-- Generation Time: Jun 25, 2026 at 10:35 AM
 -- Server version: 8.4.9
 -- PHP Version: 8.3.16
 
@@ -288,7 +288,7 @@ CREATE TABLE `pesanan` (
 
 INSERT INTO `pesanan` (`id`, `user_id`, `voucher_id`, `nomor_invoice`, `total_harga`, `potongan_diskon`, `total_bayar`, `metode_pengiriman`, `bukti_bayar`, `status`, `created_at`, `updated_at`) VALUES
 (7, 4, NULL, 'INV-20260607-C2LRL', 140000.00, 0.00, 140000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/EhUC9v1WgiVkBC0uABImrXSxa6q7mKqkZqjQjaoQ.png', 'Selesai', '2026-06-07 06:47:46', '2026-06-14 07:51:22'),
-(8, 4, NULL, 'INV-20260610-YNENQ', 30000.00, 0.00, 30000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/1MbobTSt05vKe5j3GZavlG5trUOfJ3M3Xba3jnov.png', 'Siap Ambil', '2026-06-09 20:21:55', '2026-06-15 20:41:23');
+(8, 4, NULL, 'INV-20260610-YNENQ', 30000.00, 0.00, 30000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/1MbobTSt05vKe5j3GZavlG5trUOfJ3M3Xba3jnov.png', 'Selesai', '2026-06-09 20:21:55', '2026-06-19 05:41:15');
 
 -- --------------------------------------------------------
 
@@ -315,12 +315,12 @@ CREATE TABLE `produk` (
 INSERT INTO `produk` (`id`, `bahan_baku_id`, `nama_produk`, `deskripsi`, `harga_dasar`, `satuan`, `gambar`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Cetak Banner/Cetak Spanduk/Cetak Baliho', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'm', 'produk/NwKVPuo5WjuxGUME82SFvfCdEFW0VOIiLgo0ze2Y.png', '2026-05-08 02:21:13', '2026-06-07 06:29:29'),
 (2, 1, 'Umbul Umbul Custom/Bendera Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'm', 'produk/U4DVVK98seY0SCPd56or08PkJ2Y1h4Z1HKlFsrUx.png', '2026-05-08 02:21:13', '2026-06-07 06:29:47'),
-(3, 1, 'Cetak Custom Backdrop', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'm', 'produk/4LKRDn5F80A4SKfULM93yU5C54r2vwwWWvY5SgoV.png', '2026-05-08 02:21:13', '2026-06-07 06:30:01'),
+(3, 1, 'Cetak Custom Backdrop', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'cm', 'produk/4LKRDn5F80A4SKfULM93yU5C54r2vwwWWvY5SgoV.png', '2026-05-08 02:21:13', '2026-06-24 05:58:58'),
 (4, 4, 'X/Y Banner Custom', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'm', 'produk/4Cxxfqpc4dXQBnZ1hCwBMBLAhWdnEGf6Si8LRXeR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:18'),
 (5, 2, 'Undangan Custom', 'Produk cetak berkualitas dari Orbit Print.', 10000.00, 'm', 'produk/pLuOi4YIGIzciqtKbHVQTWaSc4Lam0sZG6Al3luR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:33'),
 (6, 4, 'Stempel Custom/Stempel Flash', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'm', 'produk/ypAxo3VaxvgtHOrq6pm1b3Flpwkr27TtIUSfNLdU.png', '2026-05-08 02:21:13', '2026-06-07 06:30:52'),
 (7, 4, 'Id Card & Lanyard Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'm', 'produk/G8cHq8GKlMB6EQFBcMx9e8ijVh6ci2do2mKvjrfJ.png', '2026-05-08 02:21:13', '2026-06-07 06:31:05'),
-(10, 4, 'MUG Custom', 'Produk cetak berkualitas dari Orbit Print.', 65000.00, 'm', 'produk/mt91wYobR7F0CajD83Iw5APfysbBk3JnjY9RRcwn.png', '2026-05-08 02:21:13', '2026-06-07 06:32:15');
+(10, 4, 'MUG Custom', 'Produk cetak berkualitas dari Orbit Print.', 65000.00, 'mm', 'produk/mt91wYobR7F0CajD83Iw5APfysbBk3JnjY9RRcwn.png', '2026-05-08 02:21:13', '2026-06-24 04:04:23');
 
 -- --------------------------------------------------------
 
@@ -382,7 +382,8 @@ INSERT INTO `riwayat_pesanan` (`id`, `pesanan_id`, `status_log`, `catatan`, `cre
 (14, 7, 'Selesai', 'Status diubah oleh Kasir Orbit', '2026-06-14 07:51:22', '2026-06-14 07:51:22'),
 (15, 8, 'Siap Ambil', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:40:22', '2026-06-15 20:40:22'),
 (16, 8, 'Produksi', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:40:37', '2026-06-15 20:40:37'),
-(17, 8, 'Siap Ambil', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:41:23', '2026-06-15 20:41:23');
+(17, 8, 'Siap Ambil', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:41:23', '2026-06-15 20:41:23'),
+(18, 8, 'Selesai', 'Status diubah oleh Kasir Orbit', '2026-06-19 05:41:15', '2026-06-19 05:41:15');
 
 -- --------------------------------------------------------
 
@@ -431,7 +432,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('DFs0UlXZktKjE0ijTnLz6UaSOt3uocHO1XF1c4dL', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0', 'eyJfdG9rZW4iOiJrYlNiR1VKaU9yT21FOVlnb1Q0M3lEOUtnVEVBbWl2OUh2SXU4SmlOIiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9wZXNhbmFuXC84Iiwicm91dGUiOiJhZG1pbi5wZXNhbmFuLnNob3cifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjN9', 1781584888);
+('0C8jiARPxSf1Y1byP7yWxZggMU2zBMkhRhb4mRQD', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0', 'eyJfdG9rZW4iOiJwbUx4R3M1SFZScldwM2dqdzhjdXdsMW1YNmZLbXRJbzNSMFJwd1VyIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9wZXNhblwvMyIsInJvdXRlIjoicGVzYW4uc2hvdyJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjo0fQ==', 1782383575),
+('wkE4Buwma9KlHVcdmaXmBa073V9bbVP17DTkhKps', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0', 'eyJfdG9rZW4iOiIwdUV6THFNSFRXd0t3WTd5emFsdjdiVDR2M3lraVc5aDNUV04xejRHIiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL3Blc2FuXC8zIiwicm91dGUiOiJwZXNhbi5zaG93In0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjo0fQ==', 1782309558);
 
 -- --------------------------------------------------------
 
@@ -711,7 +713,7 @@ ALTER TABLE `produk_bahan`
 -- AUTO_INCREMENT for table `riwayat_pesanan`
 --
 ALTER TABLE `riwayat_pesanan`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `riwayat_stoks`
