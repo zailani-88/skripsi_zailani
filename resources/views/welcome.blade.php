@@ -20,7 +20,7 @@
                         <span class="text-2xl font-extrabold tracking-tighter text-gray-900 uppercase">Orbit <span class="text-indigo-600">Digital</span></span>
                     </div>
 
-                    <div class="hidden md:flex items-center space-x-8 text-base font-bold">
+                    <div class="hidden md:flex items-center space-x-8 text-sm font-bold">
                         <a href="#" class="hover:text-indigo-600 transition">Beranda</a>
                         <a href="{{ route('katalog.index') }}" class="hover:text-indigo-600 transition">Katalog</a>
                         <a href="#" class="hover:text-indigo-600 transition">Tentang Kami</a>

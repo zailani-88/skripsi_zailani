@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 10, 2026 at 04:46 AM
--- Server version: 8.4.3
+-- Generation Time: Jun 16, 2026 at 04:43 AM
+-- Server version: 8.4.9
 -- PHP Version: 8.3.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -49,8 +49,7 @@ INSERT INTO `bahan_baku` (`id`, `nama_bahan`, `kode_barcode`, `stok`, `minimum_s
 (3, 'Vinyl/Sticker', NULL, 200.00, 10, NULL, 'm2', '2026-05-08 02:21:13', '2026-05-08 02:21:13'),
 (4, 'Material Custom', NULL, 100.00, 10, NULL, 'pcs', '2026-05-08 02:21:13', '2026-05-08 02:21:13'),
 (5, 'dasda', '2', 2.00, 10, 'fdsf', '1', '2026-05-08 03:01:43', '2026-05-08 03:01:43'),
-(6, 'fsdf', '1', 16.00, 6, 'vcxv', '3', '2026-05-08 04:06:29', '2026-05-08 04:06:29'),
-(7, 'pulpen', '8', 18.00, 15, 'test', '2', '2026-06-09 20:23:45', '2026-06-09 20:24:05');
+(6, 'fsdf', '1', 16.00, 6, 'vcxv', '3', '2026-05-08 04:06:29', '2026-05-08 04:06:29');
 
 -- --------------------------------------------------------
 
@@ -106,7 +105,8 @@ INSERT INTO `detail_keranjangs` (`id`, `keranjang_id`, `produk_id`, `panjang`, `
 (5, 5, 6, 1, 2, 1, 240000, NULL, 'ok', '2026-06-07 06:35:46', '2026-06-07 06:35:46'),
 (6, 6, 2, 2, 1, 1, 140000, NULL, 'c', '2026-06-07 06:42:53', '2026-06-07 06:42:53'),
 (7, 7, 2, 2, 1, 1, 140000, NULL, NULL, '2026-06-07 06:47:38', '2026-06-07 06:47:38'),
-(8, 8, 5, 3, 1, 1, 30000, NULL, 'gjhcncncn', '2026-06-09 20:20:38', '2026-06-09 20:20:38');
+(8, 8, 5, 3, 1, 1, 30000, NULL, 'gjhcncncn', '2026-06-09 20:20:38', '2026-06-09 20:20:38'),
+(9, 9, 2, 2, 3, 1, 420000, NULL, NULL, '2026-06-14 07:49:22', '2026-06-14 07:49:22');
 
 -- --------------------------------------------------------
 
@@ -211,7 +211,8 @@ INSERT INTO `keranjangs` (`id`, `user_id`, `status`, `created_at`, `updated_at`)
 (5, 4, 'selesai', '2026-06-07 06:35:46', '2026-06-07 06:35:59'),
 (6, 3, 'selesai', '2026-06-07 06:42:53', '2026-06-07 06:43:08'),
 (7, 4, 'selesai', '2026-06-07 06:47:38', '2026-06-07 06:47:46'),
-(8, 4, 'selesai', '2026-06-09 20:20:38', '2026-06-09 20:21:55');
+(8, 4, 'selesai', '2026-06-09 20:20:38', '2026-06-09 20:21:55'),
+(9, 4, 'aktif', '2026-06-14 07:49:22', '2026-06-14 07:49:22');
 
 -- --------------------------------------------------------
 
@@ -244,7 +245,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (12, '2026_03_18_073922_create_ulasan_table', 1),
 (13, '2026_05_08_105413_add_gudang_columns_to_bahan_baku_table', 2),
 (14, '2026_05_08_105421_create_riwayat_stoks_table', 2),
-(15, '2026_05_08_110357_create_produk_bahan_table', 3);
+(15, '2026_05_08_110357_create_produk_bahan_table', 3),
+(16, '2026_06_14_153507_add_satuan_to_produk_table', 4),
+(17, '2026_06_14_153507_update_status_enum_on_pesanan_table', 4);
 
 -- --------------------------------------------------------
 
@@ -274,7 +277,7 @@ CREATE TABLE `pesanan` (
   `total_bayar` decimal(15,2) NOT NULL,
   `metode_pengiriman` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `bukti_bayar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('Menunggu Pembayaran','Verifikasi','Antrean Cetak','Produksi','Siap Ambil / Dikirim','Selesai','Dibatalkan') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Menunggu Pembayaran',
+  `status` enum('Menunggu Pembayaran','Verifikasi','Antrean Cetak','Produksi','Siap Ambil','Sedang Dikirim','Selesai','Dibatalkan') COLLATE utf8mb4_unicode_ci DEFAULT 'Menunggu Pembayaran',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -284,8 +287,8 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `user_id`, `voucher_id`, `nomor_invoice`, `total_harga`, `potongan_diskon`, `total_bayar`, `metode_pengiriman`, `bukti_bayar`, `status`, `created_at`, `updated_at`) VALUES
-(7, 4, NULL, 'INV-20260607-C2LRL', 140000.00, 0.00, 140000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/EhUC9v1WgiVkBC0uABImrXSxa6q7mKqkZqjQjaoQ.png', 'Produksi', '2026-06-07 06:47:46', '2026-06-07 06:48:23'),
-(8, 4, NULL, 'INV-20260610-YNENQ', 30000.00, 0.00, 30000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/1MbobTSt05vKe5j3GZavlG5trUOfJ3M3Xba3jnov.png', 'Selesai', '2026-06-09 20:21:55', '2026-06-09 20:38:45');
+(7, 4, NULL, 'INV-20260607-C2LRL', 140000.00, 0.00, 140000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/EhUC9v1WgiVkBC0uABImrXSxa6q7mKqkZqjQjaoQ.png', 'Selesai', '2026-06-07 06:47:46', '2026-06-14 07:51:22'),
+(8, 4, NULL, 'INV-20260610-YNENQ', 30000.00, 0.00, 30000.00, 'Ambil di Toko | Bayar via: Mandiri', 'bukti_pembayaran/1MbobTSt05vKe5j3GZavlG5trUOfJ3M3Xba3jnov.png', 'Siap Ambil', '2026-06-09 20:21:55', '2026-06-15 20:41:23');
 
 -- --------------------------------------------------------
 
@@ -299,6 +302,7 @@ CREATE TABLE `produk` (
   `nama_produk` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deskripsi` text COLLATE utf8mb4_unicode_ci,
   `harga_dasar` decimal(15,2) NOT NULL,
+  `satuan` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'm',
   `gambar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -308,15 +312,15 @@ CREATE TABLE `produk` (
 -- Dumping data for table `produk`
 --
 
-INSERT INTO `produk` (`id`, `bahan_baku_id`, `nama_produk`, `deskripsi`, `harga_dasar`, `gambar`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Cetak Banner/Cetak Spanduk/Cetak Baliho', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'produk/NwKVPuo5WjuxGUME82SFvfCdEFW0VOIiLgo0ze2Y.png', '2026-05-08 02:21:13', '2026-06-07 06:29:29'),
-(2, 1, 'Umbul Umbul Custom/Bendera Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'produk/U4DVVK98seY0SCPd56or08PkJ2Y1h4Z1HKlFsrUx.png', '2026-05-08 02:21:13', '2026-06-07 06:29:47'),
-(3, 1, 'Cetak Custom Backdrop', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'produk/4LKRDn5F80A4SKfULM93yU5C54r2vwwWWvY5SgoV.png', '2026-05-08 02:21:13', '2026-06-07 06:30:01'),
-(4, 4, 'X/Y Banner Custom', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'produk/4Cxxfqpc4dXQBnZ1hCwBMBLAhWdnEGf6Si8LRXeR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:18'),
-(5, 2, 'Undangan Custom', 'Produk cetak berkualitas dari Orbit Print.', 10000.00, 'produk/pLuOi4YIGIzciqtKbHVQTWaSc4Lam0sZG6Al3luR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:33'),
-(6, 4, 'Stempel Custom/Stempel Flash', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'produk/ypAxo3VaxvgtHOrq6pm1b3Flpwkr27TtIUSfNLdU.png', '2026-05-08 02:21:13', '2026-06-07 06:30:52'),
-(7, 4, 'Id Card & Lanyard Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'produk/G8cHq8GKlMB6EQFBcMx9e8ijVh6ci2do2mKvjrfJ.png', '2026-05-08 02:21:13', '2026-06-07 06:31:05'),
-(10, 4, 'MUG Custom', 'Produk cetak berkualitas dari Orbit Print.', 65000.00, 'produk/mt91wYobR7F0CajD83Iw5APfysbBk3JnjY9RRcwn.png', '2026-05-08 02:21:13', '2026-06-07 06:32:15');
+INSERT INTO `produk` (`id`, `bahan_baku_id`, `nama_produk`, `deskripsi`, `harga_dasar`, `satuan`, `gambar`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Cetak Banner/Cetak Spanduk/Cetak Baliho', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'm', 'produk/NwKVPuo5WjuxGUME82SFvfCdEFW0VOIiLgo0ze2Y.png', '2026-05-08 02:21:13', '2026-06-07 06:29:29'),
+(2, 1, 'Umbul Umbul Custom/Bendera Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'm', 'produk/U4DVVK98seY0SCPd56or08PkJ2Y1h4Z1HKlFsrUx.png', '2026-05-08 02:21:13', '2026-06-07 06:29:47'),
+(3, 1, 'Cetak Custom Backdrop', 'Produk cetak berkualitas dari Orbit Print.', 60000.00, 'm', 'produk/4LKRDn5F80A4SKfULM93yU5C54r2vwwWWvY5SgoV.png', '2026-05-08 02:21:13', '2026-06-07 06:30:01'),
+(4, 4, 'X/Y Banner Custom', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'm', 'produk/4Cxxfqpc4dXQBnZ1hCwBMBLAhWdnEGf6Si8LRXeR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:18'),
+(5, 2, 'Undangan Custom', 'Produk cetak berkualitas dari Orbit Print.', 10000.00, 'm', 'produk/pLuOi4YIGIzciqtKbHVQTWaSc4Lam0sZG6Al3luR.png', '2026-05-08 02:21:13', '2026-06-07 06:30:33'),
+(6, 4, 'Stempel Custom/Stempel Flash', 'Produk cetak berkualitas dari Orbit Print.', 120000.00, 'm', 'produk/ypAxo3VaxvgtHOrq6pm1b3Flpwkr27TtIUSfNLdU.png', '2026-05-08 02:21:13', '2026-06-07 06:30:52'),
+(7, 4, 'Id Card & Lanyard Custom', 'Produk cetak berkualitas dari Orbit Print.', 70000.00, 'm', 'produk/G8cHq8GKlMB6EQFBcMx9e8ijVh6ci2do2mKvjrfJ.png', '2026-05-08 02:21:13', '2026-06-07 06:31:05'),
+(10, 4, 'MUG Custom', 'Produk cetak berkualitas dari Orbit Print.', 65000.00, 'm', 'produk/mt91wYobR7F0CajD83Iw5APfysbBk3JnjY9RRcwn.png', '2026-05-08 02:21:13', '2026-06-07 06:32:15');
 
 -- --------------------------------------------------------
 
@@ -333,6 +337,19 @@ CREATE TABLE `produk_bahan` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `produk_bahan`
+--
+
+INSERT INTO `produk_bahan` (`id`, `produk_id`, `bahan_baku_id`, `jumlah_digunakan`, `tipe_pengurangan`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1.00, 'per_meter', NULL, NULL),
+(2, 1, 2, 1.00, 'per_meter', NULL, NULL),
+(3, 1, 3, 1.00, 'per_meter', NULL, NULL),
+(4, 1, 4, 1.00, 'per_meter', NULL, NULL),
+(5, 2, 2, 1.00, 'per_meter', NULL, NULL),
+(6, 2, 3, 1.00, 'per_meter', NULL, NULL),
+(7, 2, 4, 1.00, 'per_meter', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -361,7 +378,11 @@ INSERT INTO `riwayat_pesanan` (`id`, `pesanan_id`, `status_log`, `catatan`, `cre
 (10, 8, 'Produksi', 'Status diubah oleh Kasir Orbit', '2026-06-09 20:32:59', '2026-06-09 20:32:59'),
 (11, 8, 'Selesai', 'Status diubah oleh Kasir Orbit', '2026-06-09 20:35:05', '2026-06-09 20:35:05'),
 (12, 8, 'Antrean Cetak', 'Status diubah oleh Kasir Orbit', '2026-06-09 20:35:41', '2026-06-09 20:35:41'),
-(13, 8, 'Selesai', 'Status diubah oleh Zailani Super Admin', '2026-06-09 20:38:46', '2026-06-09 20:38:46');
+(13, 8, 'Selesai', 'Status diubah oleh Zailani Super Admin', '2026-06-09 20:38:46', '2026-06-09 20:38:46'),
+(14, 7, 'Selesai', 'Status diubah oleh Kasir Orbit', '2026-06-14 07:51:22', '2026-06-14 07:51:22'),
+(15, 8, 'Siap Ambil', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:40:22', '2026-06-15 20:40:22'),
+(16, 8, 'Produksi', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:40:37', '2026-06-15 20:40:37'),
+(17, 8, 'Siap Ambil', 'Status diubah oleh Kasir Orbit', '2026-06-15 20:41:23', '2026-06-15 20:41:23');
 
 -- --------------------------------------------------------
 
@@ -388,9 +409,7 @@ CREATE TABLE `riwayat_stoks` (
 
 INSERT INTO `riwayat_stoks` (`id`, `bahan_baku_id`, `user_id`, `jenis`, `jumlah`, `stok_sebelum`, `stok_sesudah`, `keterangan`, `created_at`, `updated_at`) VALUES
 (1, 5, 2, 'masuk', 2, 0, 2, 'Input Stok Awal Sistem', '2026-05-08 03:01:43', '2026-05-08 03:01:43'),
-(2, 6, 2, 'masuk', 16, 0, 16, 'Input Stok Awal Sistem', '2026-05-08 04:06:29', '2026-05-08 04:06:29'),
-(3, 7, 2, 'masuk', 6, 0, 6, 'Input Stok Awal Sistem', '2026-06-09 20:23:45', '2026-06-09 20:23:45'),
-(4, 7, 2, 'masuk', 12, 6, 18, 'yaa', '2026-06-09 20:24:05', '2026-06-09 20:24:05');
+(2, 6, 2, 'masuk', 16, 0, 16, 'Input Stok Awal Sistem', '2026-05-08 04:06:29', '2026-05-08 04:06:29');
 
 -- --------------------------------------------------------
 
@@ -412,9 +431,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('B8UbngggRI5xbfojhYlf85HXg1YX5JiyiUZcpARU', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiIzUXdvZ3lQWkZ3U2VGWHRybURvWmZnTGl4TzZEUzdjT1Z1b1ZHWVVkIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1781064658),
-('sIO86hdATccHZ4s3Se1nkOIMNl7esyF4f8yrgmOn', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJoQjExOGpsRnVKYkxKRTZNejJjVmFaeHNjaG5uRW91UlNPTnpuTzd3IiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9sYXBvcmFuXC9wZW5qdWFsYW4iLCJyb3V0ZSI6ImFkbWluLmxhcG9yYW4ucGVuanVhbGFuIn0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoxfQ==', 1781066336),
-('VTzYwaes4Ignoi1hmarG1szWABQo0RNtAKLV2V1C', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJ2eGNsMnJDcjZxR25vdUloOTEzRXJjeTlqbVhiQkNNS1BMOTZYdklaIiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9wZXNhbmFuXC83Iiwicm91dGUiOiJhZG1pbi5wZXNhbmFuLnNob3cifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjN9', 1780843711);
+('DFs0UlXZktKjE0ijTnLz6UaSOt3uocHO1XF1c4dL', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0', 'eyJfdG9rZW4iOiJrYlNiR1VKaU9yT21FOVlnb1Q0M3lEOUtnVEVBbWl2OUh2SXU4SmlOIiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2FkbWluXC9wZXNhbmFuXC84Iiwicm91dGUiOiJhZG1pbi5wZXNhbmFuLnNob3cifSwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjN9', 1781584888);
 
 -- --------------------------------------------------------
 
@@ -640,7 +657,7 @@ ALTER TABLE `bahan_baku`
 -- AUTO_INCREMENT for table `detail_keranjangs`
 --
 ALTER TABLE `detail_keranjangs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `detail_pesanan`
@@ -664,13 +681,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `keranjangs`
 --
 ALTER TABLE `keranjangs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `pesanan`
@@ -688,13 +705,13 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `produk_bahan`
 --
 ALTER TABLE `produk_bahan`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `riwayat_pesanan`
 --
 ALTER TABLE `riwayat_pesanan`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `riwayat_stoks`

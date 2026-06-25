@@ -160,53 +160,86 @@
                                 <p class="text-[10px] text-red-200 mt-1 font-bold">Harap hubungi Admin jika ada kendala.</p>
                             </div>
                         @else
+                            @php
+                                $statusSelesai = $pesanan->status === 'Selesai';
+                                $statusSiapKirim = in_array($pesanan->status, ['Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim']);
+                            @endphp
+
+                            @if($statusSelesai)
+                            <div class="mb-6 p-4 bg-emerald-500/20 border border-emerald-400/50 rounded-2xl flex items-start gap-3 animate-fade-in">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-black uppercase text-emerald-300 text-sm">Transaksi Selesai</h4>
+                                    <p class="text-[10px] text-emerald-100/90 mt-1 font-bold">Pesanan Anda telah diselesaikan oleh admin. Terima kasih!</p>
+                                </div>
+                            </div>
+                            @endif
+
                             <div class="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-indigo-800 before:to-transparent">
                                 
                                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 bg-indigo-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </div>
-                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Verifikasi', 'Antrean Cetak', 'Produksi', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }}">
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Verifikasi', 'Antrean Cetak', 'Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }}">
                                         <h4 class="font-black text-sm uppercase">Verifikasi Kasir</h4>
                                         <p class="text-[10px] text-indigo-200 mt-1">Mengecek bukti transfer Anda.</p>
                                     </div>
                                 </div>
 
                                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Antrean Cetak', 'Produksi', 'Selesai']) ? 'bg-indigo-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Antrean Cetak', 'Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim', 'Selesai']) ? 'bg-indigo-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                                     </div>
-                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Antrean Cetak', 'Produksi', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Antrean Cetak', 'Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
                                         <h4 class="font-black text-sm uppercase">Job Masuk</h4>
                                         <p class="text-[10px] text-indigo-200 mt-1">Masuk antrean mesin cetak.</p>
                                     </div>
                                 </div>
 
                                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Produksi', 'Selesai']) ? 'bg-indigo-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim', 'Selesai']) ? 'bg-indigo-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                     </div>
-                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Produksi', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Produksi', 'Siap Ambil', 'Sedang Dikirim', 'Siap Ambil / Dikirim', 'Selesai']) ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
                                         <h4 class="font-black text-sm uppercase">Diproduksi</h4>
                                         <p class="text-[10px] text-indigo-200 mt-1">Sedang dicetak & finishing.</p>
                                     </div>
                                 </div>
 
                                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ in_array($pesanan->status, ['Siap Ambil', 'Sedang Dikirim', 'Selesai']) ? 'bg-emerald-500' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ $statusSiapKirim ? 'bg-emerald-500' : ($statusSelesai ? 'bg-indigo-500' : 'bg-indigo-900') }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
-                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ in_array($pesanan->status, ['Siap Ambil', 'Sedang Dikirim', 'Selesai']) ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ $statusSiapKirim ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-900/50' : ($statusSelesai ? 'bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50') }} transition-all">
                                         <h4 class="font-black text-sm uppercase">Siap Ambil / Dikirim</h4>
                                         <p class="text-[10px] text-indigo-100 mt-1">
-                                            @if($pesanan->status == 'Siap Ambil')
+                                            @if($pesanan->status == 'Siap Ambil' || $pesanan->status == 'Siap Ambil / Dikirim')
                                                 Pesanan siap diambil di toko.
                                             @elseif($pesanan->status == 'Sedang Dikirim')
                                                 Paket sedang dalam perjalanan.
-                                            @elseif($pesanan->status == 'Selesai')
-                                                Pesanan sudah selesai.
+                                            @elseif($statusSelesai)
+                                                Pesanan sudah diambil / diterima.
                                             @else
                                                 Pesanan akan siap.
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-indigo-950 {{ $statusSelesai ? 'bg-emerald-500 ring-4 ring-emerald-400/50 animate-pulse' : 'bg-indigo-900' }} text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border {{ $statusSelesai ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-900/50' : 'bg-indigo-900/50 border-indigo-800 opacity-50' }} transition-all">
+                                        <h4 class="font-black text-sm uppercase">Transaksi Selesai</h4>
+                                        <p class="text-[10px] text-indigo-100 mt-1">
+                                            @if($statusSelesai)
+                                                Pesanan telah selesai. Terima kasih!
+                                            @else
+                                                Menunggu konfirmasi selesai dari admin.
                                             @endif
                                         </p>
                                     </div>

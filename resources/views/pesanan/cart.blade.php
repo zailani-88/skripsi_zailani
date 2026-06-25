@@ -41,7 +41,7 @@
                                             <img src="{{ asset('storage/'.$detail->produk->gambar) }}" class="w-16 h-16 rounded-xl object-cover">
                                             <div>
                                                 <span class="block font-black text-gray-950 uppercase italic leading-tight">{{ $detail->produk->nama_produk }}</span>
-                                                <span class="text-xs font-bold text-gray-400 italic">Ukuran: {{ $detail->panjang }}{{ $detail->produk->satuan ?? 'm' }} x {{ $detail->lebar }}{{ $detail->produk->satuan ?? 'm' }}</span>
+                                                <span class="text-xs font-bold text-gray-400 italic">Ukuran: {{ $detail->panjang }}m x {{ $detail->lebar }}m</span>
                                             </div>
                                         </div>
                                     </td>
